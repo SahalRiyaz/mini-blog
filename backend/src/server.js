@@ -11,7 +11,7 @@ import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const DEFAULT_PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
@@ -41,16 +41,17 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start Server
-export async function startServer() {
+export async function startServer(port) {
+  const listenPort = port || DEFAULT_PORT;
   const conn = await connectDB();
   setMongoActive(Boolean(conn));
   await initializeSeedData();
 
   return new Promise((resolve) => {
-    const server = app.listen(PORT, () => {
+    const server = app.listen(listenPort, () => {
       console.log(`=========================================`);
-      console.log(`🚀 Mini Blog Server running on port ${PORT}`);
-      console.log(`📡 Base URL: http://localhost:${PORT}`);
+      console.log(`🎨 Canvas & Prose Journal running on port ${listenPort}`);
+      console.log(`📡 Base URL: http://localhost:${listenPort}`);
       console.log(`=========================================`);
       resolve(server);
     });

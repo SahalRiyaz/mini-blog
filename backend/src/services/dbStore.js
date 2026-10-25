@@ -26,6 +26,28 @@ function generateId() {
   return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 }
 
+// Rich essays on art and aesthetic criticism
+const seedArticles = [
+  {
+    id: 'art_post_1',
+    title: 'The Quiet Geometry of Light: Vermeer and the Poetics of Interior Space',
+    content: `## The Solitude of the Dutch Interior\n\nIn the quiet studios of seventeenth-century Delft, **Johannes Vermeer** achieved something singular in Western painting: the elevation of the quiet, domestic moment into a sacred encounter with light.\n\nUnlike the dramatic theatricality of Italian Baroque or the bustling crowds of his contemporary Jan Steen, Vermeer composed scenes of radical stillness. A woman pouring milk from an earthenware jug, a young girl turning her head draped in an oriental turban, an astronomer contemplating a celestial globe—each figure is suspended in a timeless amber of illumination.\n\n### The Optical Mastery of Pigment\n\nVermeer’s handling of lapis lazuli—the rare and extraordinarily costly ultramarine pigment mined in Afghanistan—gives his shadows an extraordinary luminescence. Where lesser painters used muddy umbers, Vermeer infused his cool north light with crystalline blues:\n\n> "Color in Vermeer does not merely describe surface; it measures the emotional distance between silence and contemplation."\n\n### The Camera Obscura and Soft Focus\n\nArt historians continue to debate Vermeer's use of early optical instruments like the *camera obscura*. Notice the diffuse discs of confusion (*pointillés*) dancing across the crust of the bread in *The Milkmaid* or the lion-head finials of the chairs. These are not defects of sight, but the painter's deliberate translation of how the human eye experiences peripheral radiance.\n\nIn a world dominated by noise and velocity, returning to Vermeer reminds us that art's greatest power often lies in stillness.`,
+    tags: ['painting', 'baroque', 'vermeer', 'light'],
+  },
+  {
+    id: 'art_post_2',
+    title: 'From Pigment to Poetry: How Impressionism Redefined Color and Time',
+    content: `## The Revolution of Plein-Air Painting\n\nIn the spring of 1874, an artist collective calling themselves the *Société Anonyme des Artistes Peintres, Sculpteurs, Graveurs* staged a rogue exhibition in Paris at Nadar’s photography studio. Among the works was Claude Monet’s *Impression, Sunrise*, depicting the misty harbor of Le Havre in rapid strokes of lavender, vermilion, and slate.\n\nCritics mocked the canvas as unfinished wallpaper. Yet this rebellion marked the birth of **Impressionism**, fracturing centuries of academic dogma in favor of sensory immediacy.\n\n### Breaking the Mold: The Portable Paint Tube\n\nTechnological breakthroughs often catalyze artistic revolutions. In 1841, American painter John Goffe Rand patented the collapsible tin paint tube, emancipating artists from studio mortars and pestles. For the first time, painters could carry vibrant synthetic pigments—viridian, cobalt violet, and cadmium yellow—out into the open countryside (*en plein air*).\n\n### The Relativity of Vision\n\nConsider Monet's relentless series work on the facade of **Rouen Cathedral**, painted across changing seasons and hours of the day:\n\n- **Early Morning**: Cool blues and chalky grays as the stone awakens.\n- **Midday Sun**: Blinding ochres and bleached golds dissolving the stone gothic tracery.\n- **Sunset**: Rose-tinted ambers and indigo shadows swallowing the portal arches.\n\nMonet demonstrated that the cathedral itself was not the true subject—light itself, fluid and fleeting, was the canvas.`,
+    tags: ['impressionism', 'monet', 'color-theory', 'modern-art'],
+  },
+  {
+    id: 'art_post_3',
+    title: 'Awakening the Stone: Form, Breath, and Silence in Classical Sculpture',
+    content: `## The Non-Finito and the Living Marble\n\nTo stand before Michelangelo’s unfinished *Slaves* (*Prigioni*) in Florence is to witness marble caught in the act of becoming. The muscles of the torso strain against raw crystalline rock; the faces remain half-submerged in the quarry stone of Carrara.\n\nMichelangelo believed that sculpture was not an additive art, but an act of liberation:\n\n> "Every block of stone has a statue inside it, and it is the task of the sculptor to discover it."\n\n### The Tension Between Weight and Grace\n\nFrom the wind-swept drapery of the Hellenistic *Winged Victory of Samothrace* to Auguste Rodin’s rough-hewn bronzes, great sculpture navigates a fundamental paradox: how to make the heaviest, most enduring materials of the earth convey human vulnerability, breath, and movement.\n\nWhen we walk around a three-dimensional work of art, our own bodies become part of the composition. Every angle reshapes the silhouette, every shift in gallery shadow changes the expression carved in stone thousands of years ago.`,
+    tags: ['sculpture', 'renaissance', 'michelangelo', 'form'],
+  },
+];
+
 // Initialize seed data for both memory store and MongoDB
 export async function initializeSeedData() {
   const adminPasswordHash = await bcrypt.hash('admin123', 10);
@@ -35,49 +57,38 @@ export async function initializeSeedData() {
     try {
       const userCount = await User.countDocuments();
       if (userCount === 0) {
-        console.log('[Seed] Database is empty. Seeding initial admin, reader, and posts into MongoDB...');
+        console.log('[Seed] Database is empty. Seeding initial curator, reader, and art essays into MongoDB...');
         
         const admin = await User.create({
-          name: 'Admin User',
+          name: 'Elena Rostova (Curator)',
           email: 'admin@miniblog.com',
           passwordHash: adminPasswordHash,
           role: 'admin',
         });
 
         const reader = await User.create({
-          name: 'Jane Reader',
+          name: 'Julian Vance (Art Critic)',
           email: 'reader@miniblog.com',
           passwordHash: readerPasswordHash,
           role: 'reader',
         });
 
-        const post1 = await Post.create({
-          title: 'Welcome to Mini Blog: Getting Started',
-          content: `## Welcome to Mini Blog!\n\nThis is a lightweight, responsive blog built with **React**, **Express**, and **Node.js**.\n\n### Key Features:\n- 🔐 **JWT Authentication** with password hashing using bcrypt\n- 👥 **Role-Based Access Control**: Admins create/edit/delete posts, readers comment\n- 📝 **Markdown Support**: Rich formatting with headings, code blocks, lists, and links\n- 🏷️ **Tagging & Instant Search**: Filter content easily\n- 💬 **Discussion Threading**: Real-time reader comments\n\nEnjoy exploring and testing the application!`,
-          tags: ['announcement', 'welcome', 'guide'],
-          authorId: admin._id,
-        });
+        for (const item of seedArticles) {
+          const post = await Post.create({
+            title: item.title,
+            content: item.content,
+            tags: item.tags,
+            authorId: admin._id,
+          });
 
-        const post2 = await Post.create({
-          title: 'Mastering Modern Full-Stack Development in 2026',
-          content: `Modern web development thrives on clean architectures and fast feedback loops.\n\n### Why Separation of Concerns Matters\nWhen building single-page applications with React and REST APIs:\n1. **Predictable State**: Keep client logic decoupled from data storage.\n2. **Security**: Validate on the server, enforce role-based middleware, and sign JWTs.\n3. **Flexibility**: Switch between databases without rewriting your client views.\n\n\`\`\`javascript\n// Clean JWT auth middleware\nexport function requireAdmin(req, res, next) {\n  if (req.user?.role !== 'admin') {\n    return res.status(403).json({ error: 'Admin access required' });\n  }\n  next();\n}\n\`\`\`\n\nDrop a comment below with your favorite development stack!`,
-          tags: ['javascript', 'fullstack', 'architecture'],
-          authorId: admin._id,
-        });
+          await Comment.create({
+            postId: post._id,
+            userId: reader._id,
+            text: 'A profoundly insightful reading of the brushwork and thematic composition. The historical framing is sublime.',
+          });
+        }
 
-        await Comment.create({
-          postId: post1._id,
-          userId: reader._id,
-          text: 'Great starting guide! The Markdown preview is super clean.',
-        });
-
-        await Comment.create({
-          postId: post2._id,
-          userId: reader._id,
-          text: 'Love the middleware snippet. Concise and secure.',
-        });
-
-        console.log('[Seed] MongoDB seeded successfully.');
+        console.log('[Seed] Art essays and discussions seeded successfully.');
       }
     } catch (err) {
       console.error('[Seed Error] Failed to seed MongoDB:', err.message);
@@ -86,8 +97,8 @@ export async function initializeSeedData() {
     // Seed in-memory store
     memoryStore.users = [
       {
-        id: 'usr_admin',
-        name: 'Admin User',
+        id: 'usr_curator',
+        name: 'Elena Rostova (Curator)',
         email: 'admin@miniblog.com',
         passwordHash: adminPasswordHash,
         role: 'admin',
@@ -95,7 +106,7 @@ export async function initializeSeedData() {
       },
       {
         id: 'usr_reader',
-        name: 'Jane Reader',
+        name: 'Julian Vance (Art Critic)',
         email: 'reader@miniblog.com',
         passwordHash: readerPasswordHash,
         role: 'reader',
@@ -103,45 +114,41 @@ export async function initializeSeedData() {
       },
     ];
 
-    memoryStore.posts = [
-      {
-        id: 'post_1',
-        title: 'Welcome to Mini Blog: Getting Started',
-        content: `## Welcome to Mini Blog!\n\nThis is a lightweight, responsive blog built with **React**, **Express**, and **Node.js**.\n\n### Key Features:\n- 🔐 **JWT Authentication** with password hashing using bcrypt\n- 👥 **Role-Based Access Control**: Admins create/edit/delete posts, readers comment\n- 📝 **Markdown Support**: Rich formatting with headings, code blocks, lists, and links\n- 🏷️ **Tagging & Instant Search**: Filter content easily\n- 💬 **Discussion Threading**: Real-time reader comments\n\nEnjoy exploring and testing the application!`,
-        tags: ['announcement', 'welcome', 'guide'],
-        authorId: 'usr_admin',
-        createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-        updatedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-      },
-      {
-        id: 'post_2',
-        title: 'Mastering Modern Full-Stack Development in 2026',
-        content: `Modern web development thrives on clean architectures and fast feedback loops.\n\n### Why Separation of Concerns Matters\nWhen building single-page applications with React and REST APIs:\n1. **Predictable State**: Keep client logic decoupled from data storage.\n2. **Security**: Validate on the server, enforce role-based middleware, and sign JWTs.\n3. **Flexibility**: Switch between databases without rewriting your client views.\n\n\`\`\`javascript\n// Clean JWT auth middleware\nexport function requireAdmin(req, res, next) {\n  if (req.user?.role !== 'admin') {\n    return res.status(403).json({ error: 'Admin access required' });\n  }\n  next();\n}\n\`\`\`\n\nDrop a comment below with your favorite development stack!`,
-        tags: ['javascript', 'fullstack', 'architecture'],
-        authorId: 'usr_admin',
-        createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-        updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-      },
-    ];
+    memoryStore.posts = seedArticles.map((art, idx) => ({
+      id: art.id,
+      title: art.title,
+      content: art.content,
+      tags: art.tags,
+      authorId: 'usr_curator',
+      createdAt: new Date(Date.now() - 3600000 * (idx * 3 + 1)).toISOString(),
+      updatedAt: new Date(Date.now() - 3600000 * (idx * 3 + 1)).toISOString(),
+    }));
 
     memoryStore.comments = [
       {
         id: 'cmt_1',
-        postId: 'post_1',
+        postId: 'art_post_1',
         userId: 'usr_reader',
-        text: 'Great starting guide! The Markdown preview is super clean.',
+        text: 'The distinction between Vermeer’s quiet domesticity and the grandiose Baroque of his contemporaries is captured beautifully here. The observation on the lapis lazuli shadows is striking.',
         createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
       },
       {
         id: 'cmt_2',
-        postId: 'post_2',
+        postId: 'art_post_2',
         userId: 'usr_reader',
-        text: 'Love the middleware snippet. Concise and secure.',
+        text: 'Monet’s Rouen Cathedral series proved that light itself is the true subject of painting, not the stone. A wonderful reflection on the impact of portable paint tubes as well.',
+        createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+      },
+      {
+        id: 'cmt_3',
+        postId: 'art_post_3',
+        userId: 'usr_reader',
+        text: 'The concept of non-finito in Michelangelo has always felt almost contemporary in its emotional rawness. Beautiful essay!',
         createdAt: new Date(Date.now() - 3600000 * 1).toISOString(),
       },
     ];
 
-    console.log('[Store] In-memory store initialized with demo admin (admin@miniblog.com / admin123) and reader (reader@miniblog.com / reader123).');
+    console.log('[Store] Journal store initialized with demo curator (admin@miniblog.com) and reader (reader@miniblog.com).');
   }
 }
 

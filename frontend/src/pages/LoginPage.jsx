@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { LogIn, Lock, Mail, AlertCircle, Shield, User } from 'lucide-react';
+import { Palette, Lock, Mail, AlertCircle, Crown, BookOpen } from 'lucide-react';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Please provide both email and password.');
+      setError('Please provide both your journal email and password.');
       return;
     }
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
       navigate(from, { replace: true });
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.response?.data?.error || 'Invalid credentials. Please try again.');
+      setError(err.response?.data?.error || 'Unrecognized credentials. Please verify your details.');
     } finally {
       setLoading(false);
     }
@@ -43,13 +43,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl p-8 transition-colors">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-amber-100 dark:border-slate-800 shadow-xl p-8 transition-colors">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-3">
-            <LogIn className="w-6 h-6" />
+          <div className="w-12 h-12 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">
+            <Palette className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Welcome Back</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Sign in with your Mini Blog account to continue</p>
+          <h1 className="text-2xl font-serif font-bold text-slate-900 dark:text-white tracking-tight">Welcome to the Journal</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Sign in to your reader or curator account</p>
         </div>
 
         {error && (
@@ -62,7 +62,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-              Email Address
+              Journal Email
             </label>
             <div className="relative">
               <div className="absolute left-3.5 top-3 text-slate-400 dark:text-slate-500">
@@ -72,9 +72,9 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="reader@miniblog.com"
+                placeholder="reader@canvasandprose.com"
                 required
-                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
               />
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
               />
             </div>
           </div>
@@ -101,41 +101,41 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-md shadow-brand-500/20 hover:shadow-lg transition-all"
+            className="w-full py-3 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-md transition-all font-sans"
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            {loading ? 'Entering Journal...' : 'Sign In'}
           </button>
         </form>
 
-        {/* 1-Click Demo Buttons */}
+        {/* 1-Click Demo Profiles */}
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
           <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-center mb-3">
-            Quick 1-Click Demo Accounts
+            Quick Guest Access
           </p>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => handleFillDemo('admin@miniblog.com', 'admin123')}
-              className="flex items-center justify-center space-x-1.5 py-2 px-3 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-xl text-xs font-medium border border-purple-200 dark:border-purple-800 transition-colors"
+              className="flex items-center justify-center space-x-1.5 py-2 px-3 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-medium border border-amber-200 dark:border-amber-800 transition-colors"
             >
-              <Shield className="w-3.5 h-3.5" />
-              <span>Fill Admin</span>
+              <Crown className="w-3.5 h-3.5 text-amber-600" />
+              <span>Curator Profile</span>
             </button>
             <button
               type="button"
               onClick={() => handleFillDemo('reader@miniblog.com', 'reader123')}
               className="flex items-center justify-center space-x-1.5 py-2 px-3 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs font-medium border border-emerald-200 dark:border-emerald-800 transition-colors"
             >
-              <User className="w-3.5 h-3.5" />
-              <span>Fill Reader</span>
+              <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Reader Profile</span>
             </button>
           </div>
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
-          Don't have an account yet?{' '}
-          <Link to="/register" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
-            Sign up here
+          Not yet a member of our community?{' '}
+          <Link to="/register" className="font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300">
+            Join the Journal
           </Link>
         </p>
       </div>

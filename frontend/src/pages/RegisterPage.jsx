@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { UserPlus, User, Mail, Lock, Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Palette, BookOpen, Mail, Lock, Crown, AlertCircle, CheckCircle2, User } from 'lucide-react';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -17,12 +17,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
-      setError('Please fill in all required fields.');
+      setError('Please fill in all requested fields.');
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+      setError('Password must contain at least 6 characters.');
       return;
     }
 
@@ -37,7 +37,7 @@ export default function RegisterPage() {
       }
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.error || 'Registration failed. Please try again.');
+      setError(err.response?.data?.error || 'Membership creation could not be completed.');
     } finally {
       setLoading(false);
     }
@@ -45,13 +45,13 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl p-8 transition-colors">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-amber-100 dark:border-slate-800 shadow-xl p-8 transition-colors">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 bg-slate-900 dark:bg-brand-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md">
-            <UserPlus className="w-6 h-6" />
+          <div className="w-12 h-12 bg-amber-700 dark:bg-amber-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md">
+            <Palette className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Create an Account</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Join Mini Blog as a reader or administrator</p>
+          <h1 className="text-2xl font-serif font-bold text-slate-900 dark:text-white tracking-tight">Join Canvas & Prose</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Become part of our international arts and literary community</p>
         </div>
 
         {error && (
@@ -74,9 +74,9 @@ export default function RegisterPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Jane Doe"
+                placeholder="Camille Claudel"
                 required
-                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
               />
             </div>
           </div>
@@ -93,9 +93,9 @@ export default function RegisterPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="jane@example.com"
+                placeholder="camille@canvasandprose.com"
                 required
-                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
               />
             </div>
           </div>
@@ -115,21 +115,21 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 required
                 minLength={6}
-                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
               />
             </div>
           </div>
 
-          {/* Role Selection */}
+          {/* Membership Tier / Role Selection */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-              Select Your Role
+              Select Membership Tier
             </label>
             <div className="grid grid-cols-2 gap-3">
               <label
-                className={`relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all ${
+                className={`relative flex flex-col p-3.5 rounded-2xl border cursor-pointer transition-all ${
                   role === 'reader'
-                    ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/40 ring-2 ring-brand-500/20'
+                    ? 'border-amber-600 bg-amber-50/60 dark:bg-amber-950/40 ring-2 ring-amber-500/20'
                     : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'
                 }`}
               >
@@ -143,20 +143,20 @@ export default function RegisterPage() {
                 />
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-1">
-                    <User className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
-                    <span>Reader</span>
+                    <BookOpen className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                    <span>Reader & Patron</span>
                   </span>
-                  {role === 'reader' && <CheckCircle2 className="w-4 h-4 text-brand-600 dark:text-brand-400" />}
+                  {role === 'reader' && <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />}
                 </div>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
-                  Read stories & leave comments
+                  Read essays & share reflections
                 </span>
               </label>
 
               <label
-                className={`relative flex flex-col p-3 rounded-2xl border cursor-pointer transition-all ${
+                className={`relative flex flex-col p-3.5 rounded-2xl border cursor-pointer transition-all ${
                   role === 'admin'
-                    ? 'border-purple-500 bg-purple-50/50 dark:bg-purple-950/40 ring-2 ring-purple-500/20'
+                    ? 'border-amber-600 bg-amber-50/60 dark:bg-amber-950/40 ring-2 ring-amber-500/20'
                     : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'
                 }`}
               >
@@ -170,13 +170,13 @@ export default function RegisterPage() {
                 />
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-1">
-                    <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                    <span>Admin</span>
+                    <Crown className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                    <span>Curator</span>
                   </span>
-                  {role === 'admin' && <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-purple-400" />}
+                  {role === 'admin' && <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />}
                 </div>
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
-                  Publish, edit & delete posts
+                  Compose, curate & edit articles
                 </span>
               </label>
             </div>
@@ -185,15 +185,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-md transition-all mt-2"
+            className="w-full py-3 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 disabled:opacity-50 text-white font-semibold text-sm rounded-xl shadow-md transition-all mt-2"
           >
-            {loading ? 'Creating Account...' : 'Complete Registration'}
+            {loading ? 'Registering Membership...' : 'Complete Journal Registration'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
-          Already have an account?{' '}
-          <Link to="/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+          Already a journal member?{' '}
+          <Link to="/login" className="font-semibold text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300">
             Sign in
           </Link>
         </p>

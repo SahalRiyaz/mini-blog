@@ -16,6 +16,7 @@ import {
   Link2,
   AlertCircle,
   Tag,
+  Feather,
 } from 'lucide-react';
 
 export default function PostEditorPage() {
@@ -47,8 +48,8 @@ export default function PostEditorPage() {
       setContent(post.content || '');
       setTagsInput(post.tags ? post.tags.join(', ') : '');
     } catch (err) {
-      console.error('Failed to load post for editing:', err);
-      setError('Could not load article data. Please return to the dashboard.');
+      console.error('Failed to load essay for editing:', err);
+      setError('Could not load essay text. Please return to the studio.');
     } finally {
       setLoading(false);
     }
@@ -75,7 +76,7 @@ export default function PostEditorPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      setError('Please provide both a title and article content.');
+      setError('Please provide an essay title and the body of the article.');
       return;
     }
 
@@ -103,8 +104,8 @@ export default function PostEditorPage() {
         navigate(`/posts/${createdId}`);
       }
     } catch (err) {
-      console.error('Failed to save post:', err);
-      setError(err.response?.data?.error || 'Failed to save post. Please check your inputs.');
+      console.error('Failed to save essay:', err);
+      setError(err.response?.data?.error || 'Failed to publish essay. Please check your entries.');
       setSaving(false);
     }
   };
@@ -112,8 +113,8 @@ export default function PostEditorPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600 mx-auto"></div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-3">Loading article editor...</p>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto"></div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 font-serif">Opening essay manuscript...</p>
       </div>
     );
   }
@@ -124,10 +125,10 @@ export default function PostEditorPage() {
       <div className="flex items-center justify-between mb-8">
         <Link
           to="/admin"
-          className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
+          <span>Return to Curator Studio</span>
         </Link>
 
         <div className="flex items-center space-x-3">
@@ -135,16 +136,16 @@ export default function PostEditorPage() {
             to="/admin"
             className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl transition-colors"
           >
-            Cancel
+            Discard
           </Link>
           <button
             type="button"
             onClick={handleSubmit}
             disabled={saving}
-            className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md shadow-brand-500/20 transition-all"
+            className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md transition-all font-sans"
           >
             <Save className="w-4 h-4" />
-            <span>{saving ? 'Publishing...' : isEditing ? 'Update Post' : 'Publish Story'}</span>
+            <span>{saving ? 'Publishing...' : isEditing ? 'Update Article' : 'Publish to Journal'}</span>
           </button>
         </div>
       </div>
@@ -157,38 +158,38 @@ export default function PostEditorPage() {
       )}
 
       {/* Editor Card */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6 transition-colors">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-3xl border border-amber-100/90 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6 transition-colors">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-            Post Title
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-sans">
+            Essay Title
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Architecting Scalable REST APIs with Express and Node.js"
+            placeholder="e.g. The Architecture of Silence: Morandi’s Still Lifes and the Poetics of the Everyday"
             required
-            className="w-full px-4 py-3 text-lg font-bold rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            className="w-full px-4 py-3 text-lg font-serif font-bold rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 flex items-center space-x-1">
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 flex items-center space-x-1 font-sans">
             <Tag className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
-            <span>Tags (comma separated)</span>
+            <span>Artistic Themes & Movements (comma separated)</span>
           </label>
           <input
             type="text"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
-            placeholder="javascript, tutorial, webdev, express"
-            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+            placeholder="modern-art, painting, aesthetics, exhibition, still-life"
+            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
           />
         </div>
 
-        {/* Markdown Toolbar & Tab Switcher */}
+        {/* Toolbar & Tab Switcher */}
         <div>
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-amber-100 dark:border-slate-800 mb-3">
             {/* Toolbar Buttons */}
             <div className="flex flex-wrap items-center gap-1">
               <button
@@ -219,31 +220,15 @@ export default function PostEditorPage() {
                 type="button"
                 onClick={() => insertMarkdown('> ')}
                 className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Blockquote"
+                title="Blockquote / Critical Citation"
               >
                 <Quote className="w-4 h-4" />
               </button>
               <button
                 type="button"
-                onClick={() => insertMarkdown('`', '`')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Inline Code"
-              >
-                <Code className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('```javascript\n', '\n```')}
-                className="px-2 py-1 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-xs font-mono font-medium"
-                title="Code Block"
-              >
-                {'{ }'}
-              </button>
-              <button
-                type="button"
                 onClick={() => insertMarkdown('- ')}
                 className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Bulleted List"
+                title="Catalog List"
               >
                 <List className="w-4 h-4" />
               </button>
@@ -251,14 +236,14 @@ export default function PostEditorPage() {
                 type="button"
                 onClick={() => insertMarkdown('[', '](https://example.com)')}
                 className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Link"
+                title="Reference Link"
               >
                 <Link2 className="w-4 h-4" />
               </button>
             </div>
 
             {/* Mode Switcher */}
-            <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            <div className="flex items-center space-x-1 bg-amber-50 dark:bg-slate-800 p-1 rounded-xl">
               <button
                 type="button"
                 onClick={() => setActiveTab('write')}
@@ -269,7 +254,7 @@ export default function PostEditorPage() {
                 }`}
               >
                 <Edit className="w-3.5 h-3.5" />
-                <span>Markdown Editor</span>
+                <span>Writing Desk</span>
               </button>
               <button
                 type="button"
@@ -281,7 +266,7 @@ export default function PostEditorPage() {
                 }`}
               >
                 <Eye className="w-3.5 h-3.5" />
-                <span>Live Preview</span>
+                <span>Reader Preview</span>
               </button>
             </div>
           </div>
@@ -292,19 +277,19 @@ export default function PostEditorPage() {
               id="post-content-textarea"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your article in Markdown here...&#10;&#10;## Subheading&#10;Paragraph content with **bold**, *italics*, and lists:&#10;- Item 1&#10;- Item 2"
+              placeholder="Compose your article in Markdown here...&#10;&#10;## Visual Analysis&#10;Reflections on the artist's brushwork, palette, and emotional resonance...&#10;&#10;> 'Every canvas is a journey into a foreign harbor.'"
               rows={16}
               required
-              className="w-full p-4 font-mono text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 resize-y leading-relaxed transition-colors"
+              className="w-full p-4 font-mono text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-y leading-relaxed transition-colors"
             />
           ) : (
-            <div className="min-h-[384px] p-6 bg-slate-50/50 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto">
+            <div className="min-h-[384px] p-6 bg-slate-50/50 dark:bg-slate-950/60 rounded-2xl border border-amber-100 dark:border-slate-800 overflow-y-auto">
               {content.trim() ? (
                 <div className="markdown-body">
                   <ReactMarkdown>{content}</ReactMarkdown>
                 </div>
               ) : (
-                <p className="text-sm text-slate-400 dark:text-slate-500 italic">No content to preview yet. Start typing above!</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500 italic font-serif">No manuscript text to preview yet. Begin composing above.</p>
               )}
             </div>
           )}

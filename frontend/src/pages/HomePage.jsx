@@ -4,7 +4,7 @@ import { api } from '../api/client.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import PostCard from '../components/PostCard.jsx';
 import TagBadge from '../components/TagBadge.jsx';
-import { Search, Sparkles, X, PlusCircle, BookOpen, AlertCircle } from 'lucide-react';
+import { Search, Sparkles, X, PenTool, BookOpen, AlertCircle } from 'lucide-react';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +46,7 @@ export default function HomePage() {
       }
     } catch (err) {
       console.error('Failed to fetch posts:', err);
-      setError('Unable to load blog posts. Please ensure the backend is running.');
+      setError('Unable to load journal articles. Please refresh shortly.');
     } finally {
       setLoading(false);
     }
@@ -73,18 +73,18 @@ export default function HomePage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Hero Section */}
-      <section className="text-center py-12 md:py-16 bg-gradient-to-b from-brand-50/60 via-white to-transparent dark:from-slate-900/80 dark:via-slate-900/40 dark:to-transparent rounded-3xl border border-slate-200/60 dark:border-slate-800 p-6 md:p-12 mb-12 shadow-sm relative overflow-hidden transition-colors">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-100 dark:bg-brand-950/60 text-brand-800 dark:text-brand-300 text-xs font-semibold mb-4 border border-brand-200 dark:border-brand-800">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Full-Stack Mini Blog Engine</span>
+      <section className="text-center py-14 md:py-20 bg-gradient-to-b from-amber-50/70 via-white to-transparent dark:from-slate-900/80 dark:via-slate-900/40 dark:to-transparent rounded-3xl border border-amber-100 dark:border-slate-800 p-6 md:p-14 mb-14 shadow-sm relative overflow-hidden transition-colors">
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-100/80 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-semibold mb-5 border border-amber-200 dark:border-amber-800 font-sans tracking-wide">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+          <span>A Curated Journal of Art, Aesthetics & Cultural Inquiry</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
-          Thoughts, ideas, and architecture in <span className="bg-gradient-to-r from-brand-600 to-indigo-600 dark:from-brand-400 dark:to-indigo-400 bg-clip-text text-transparent">modern code</span>.
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-slate-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
+          Where pigment, light, and thought <span className="italic font-serif text-amber-700 dark:text-amber-400">converge</span>.
         </h1>
 
-        <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-          Built with React, Express, and JWT Authentication. Explore articles, filter by tag, and join discussions.
+        <p className="mt-5 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-sans leading-relaxed">
+          Exploring the masterpieces of classical antiquity, Renaissance innovations, Impressionist revolutions, and the philosophical contemplation of visual form.
         </p>
 
         {/* Search Bar */}
@@ -99,22 +99,22 @@ export default function HomePage() {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search articles by title or keyword..."
-            className="w-full pl-12 pr-28 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            placeholder="Search essays, artists, movements, or periods..."
+            className="w-full pl-12 pr-28 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-slate-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
           />
           <button
             type="submit"
-            className="absolute right-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-brand-600 dark:hover:bg-brand-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-all"
+            className="absolute right-2 px-5 py-2 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-all"
           >
-            Search
+            Discover
           </button>
         </form>
 
         {/* Tags bar */}
         {allTags.length > 0 && (
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
             <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
-              Popular Tags:
+              Curated Themes:
             </span>
             {allTags.map((tag) => (
               <TagBadge key={tag} tag={tag} active={currentTag === tag} />
@@ -123,16 +123,16 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* Filter notification and Admin Quick Action */}
+      {/* Filter notification and Curator Action */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-            {isFiltering ? 'Search Results' : 'Latest Stories'}
+          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            {isFiltering ? 'Curated Selections' : 'Featured Essays & Articles'}
           </h2>
           {isFiltering && (
             <div className="flex items-center space-x-2 mt-1">
               <span className="text-xs text-slate-500 dark:text-slate-400">
-                Filtered by {currentTag && `tag: #${currentTag}`} {searchParams.get('search') && `keyword: "${searchParams.get('search')}"`}
+                Filtered by {currentTag && `theme: #${currentTag}`} {searchParams.get('search') && `inquiry: "${searchParams.get('search')}"`}
               </span>
               <button
                 type="button"
@@ -140,7 +140,7 @@ export default function HomePage() {
                 className="inline-flex items-center space-x-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-900"
               >
                 <X className="w-3 h-3" />
-                <span>Clear filters</span>
+                <span>Clear filter</span>
               </button>
             </div>
           )}
@@ -149,10 +149,10 @@ export default function HomePage() {
         {isAdmin && (
           <Link
             to="/admin/new"
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-sm transition-all"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold shadow-sm transition-all"
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>Create New Post</span>
+            <PenTool className="w-4 h-4" />
+            <span>Compose New Essay</span>
           </Link>
         )}
       </div>
@@ -168,7 +168,7 @@ export default function HomePage() {
       {/* Posts Grid */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((n) => (
+          {[1, 2, 3].map((n) => (
             <div
               key={n}
               className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 animate-pulse"
@@ -183,25 +183,25 @@ export default function HomePage() {
       ) : posts.length === 0 ? (
         <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
           <BookOpen className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200">No posts found</h3>
+          <h3 className="text-lg font-serif font-bold text-slate-700 dark:text-slate-200">No essays found</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
             {isFiltering
-              ? 'Try modifying your search keywords or removing selected tag filters.'
-              : 'There are no published articles yet. Admins can create the first post!'}
+              ? 'Try searching with different artistic movements or resetting active theme filters.'
+              : 'Our editorial desk has not published essays yet. Curators can begin writing!'}
           </p>
           {isFiltering ? (
             <button
               onClick={clearFilters}
-              className="px-4 py-2 text-xs font-semibold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/50 hover:bg-brand-100 dark:hover:bg-brand-900/50 rounded-xl transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 rounded-xl transition-colors"
             >
               Reset Filters
             </button>
           ) : isAdmin ? (
             <Link
               to="/admin/new"
-              className="px-4 py-2 text-xs font-semibold text-white bg-brand-600 rounded-xl"
+              className="px-4 py-2 text-xs font-semibold text-white bg-amber-600 rounded-xl"
             >
-              Create Post Now
+              Compose Essay
             </Link>
           ) : null}
         </div>

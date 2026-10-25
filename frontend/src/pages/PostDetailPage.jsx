@@ -10,8 +10,8 @@ import {
   Calendar,
   Edit,
   Trash2,
-  Shield,
-  User,
+  Crown,
+  BookOpen,
   AlertCircle,
   Share2,
   Check,
@@ -40,14 +40,14 @@ export default function PostDetailPage() {
       setPost(res.data.post);
     } catch (err) {
       console.error('Failed to fetch post:', err);
-      setError('Article not found or could not be loaded.');
+      setError('The requested essay could not be found in the journal archives.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this post? This cannot be undone.')) {
+    if (!window.confirm('Are you sure you want to retract and delete this essay? This action cannot be undone.')) {
       return;
     }
 
@@ -57,7 +57,7 @@ export default function PostDetailPage() {
       navigate('/', { replace: true });
     } catch (err) {
       console.error('Failed to delete post:', err);
-      alert(err.response?.data?.error || 'Failed to delete post.');
+      alert(err.response?.data?.error || 'Failed to remove essay.');
       setDeleting(false);
     }
   };
@@ -91,14 +91,14 @@ export default function PostDetailPage() {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center">
         <AlertCircle className="w-12 h-12 text-rose-500 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Post Not Found</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">{error || 'This post does not exist or has been removed.'}</p>
+        <h2 className="text-xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-2">Essay Not Found</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">{error || 'This article does not exist or has been archived.'}</p>
         <Link
           to="/"
-          className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-900 dark:bg-brand-600 text-white rounded-xl text-sm font-semibold"
+          className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-900 dark:bg-amber-600 text-white rounded-xl text-sm font-semibold"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Return to Homepage</span>
+          <span>Return to Journal</span>
         </Link>
       </div>
     );
@@ -112,7 +112,7 @@ export default function PostDetailPage() {
       })
     : '';
 
-  const authorName = post.author?.name || 'Anonymous Author';
+  const authorName = post.author?.name || 'Curator Elena';
   const authorRole = post.author?.role || 'admin';
 
   return (
@@ -121,10 +121,10 @@ export default function PostDetailPage() {
       <div className="flex items-center justify-between mb-8">
         <Link
           to="/"
-          className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to all posts</span>
+          <span>Back to all essays</span>
         </Link>
 
         {/* Action toolbar */}
@@ -152,10 +152,10 @@ export default function PostDetailPage() {
             <div className="flex items-center space-x-2 pl-2 border-l border-slate-200 dark:border-slate-800">
               <Link
                 to={`/admin/edit/${post.id}`}
-                className="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition-colors border border-slate-300 dark:border-slate-700"
+                className="inline-flex items-center space-x-1 px-3 py-1.5 bg-amber-50 dark:bg-slate-800 hover:bg-amber-100 dark:hover:bg-slate-700 text-amber-800 dark:text-slate-200 text-xs font-semibold rounded-xl transition-colors border border-amber-200 dark:border-slate-700"
               >
                 <Edit className="w-3.5 h-3.5" />
-                <span>Edit</span>
+                <span>Edit Essay</span>
               </Link>
               <button
                 type="button"
@@ -164,7 +164,7 @@ export default function PostDetailPage() {
                 className="inline-flex items-center space-x-1 px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-xl transition-colors border border-rose-200 dark:border-rose-900 disabled:opacity-50"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>{deleting ? 'Deleting...' : 'Delete'}</span>
+                <span>{deleting ? 'Removing...' : 'Retract'}</span>
               </button>
             </div>
           )}
@@ -173,13 +173,13 @@ export default function PostDetailPage() {
 
       {/* Post Header */}
       <header className="mb-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white tracking-tight leading-tight mb-6">
           {post.title}
         </h1>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-slate-200 dark:border-slate-800 text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-amber-100 dark:border-slate-800 text-sm">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 flex items-center justify-center font-bold text-sm text-brand-700 dark:text-brand-300">
+            <div className="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 flex items-center justify-center font-bold text-sm text-amber-800 dark:text-amber-300">
               {authorName.charAt(0).toUpperCase()}
             </div>
             <div>
@@ -188,17 +188,17 @@ export default function PostDetailPage() {
                 <span
                   className={`inline-flex items-center space-x-0.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                     authorRole === 'admin'
-                      ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800'
+                      ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                       : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                   }`}
                 >
-                  {authorRole === 'admin' ? <Shield className="w-2.5 h-2.5 mr-0.5" /> : <User className="w-2.5 h-2.5 mr-0.5" />}
-                  {authorRole}
+                  {authorRole === 'admin' ? <Crown className="w-2.5 h-2.5 mr-0.5 text-amber-600" /> : <BookOpen className="w-2.5 h-2.5 mr-0.5" />}
+                  {authorRole === 'admin' ? 'Curator' : 'Reader'}
                 </span>
               </div>
               <div className="flex items-center space-x-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                 <Calendar className="w-3 h-3" />
-                <span>Published on {formattedDate}</span>
+                <span>Published {formattedDate}</span>
               </div>
             </div>
           </div>
@@ -214,11 +214,11 @@ export default function PostDetailPage() {
       </header>
 
       {/* Markdown Body */}
-      <div className="markdown-body bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
+      <div className="markdown-body bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-3xl border border-amber-100/90 dark:border-slate-800 shadow-sm transition-colors">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
 
-      {/* Discussion & Comments */}
+      {/* Discussion & Reflections */}
       <CommentSection postId={post.id} />
     </article>
   );
