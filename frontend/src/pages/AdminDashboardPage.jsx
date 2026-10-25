@@ -8,12 +8,8 @@ import {
   ExternalLink,
   Edit3,
   Trash2,
-  Users,
-  FileText,
-  Heart,
   AlertCircle,
 } from 'lucide-react';
-import TagBadge from '../components/TagBadge.jsx';
 
 export default function AdminDashboardPage() {
   const { user } = useAuth();
@@ -66,19 +62,23 @@ export default function AdminDashboardPage() {
     );
   });
 
+  const totalTags = Array.from(
+    new Set(posts.flatMap((p) => (Array.isArray(p.tags) ? p.tags : [])))
+  ).length;
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       {/* Substack Dashboard Masthead */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EDEDEA] dark:border-[#27272A] mb-8">
         <div>
           <span className="text-xs uppercase font-sans font-bold tracking-widest text-[#FF6719]">
-            Publication Dashboard
+            Publication Studio
           </span>
           <h1 className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">
             Canvas & Prose
           </h1>
           <p className="text-xs text-neutral-500 mt-0.5">
-            Elena Rostova • 1,420 total subscribers
+            Logged in as {user?.name || 'Curator'} ({user?.email})
           </p>
         </div>
 
@@ -91,35 +91,30 @@ export default function AdminDashboardPage() {
         </Link>
       </div>
 
-      {/* Substack Publication Metric Counters */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      {/* Real Metric Counters */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
-          <span className="text-xs text-neutral-500 font-medium">Published Essays</span>
+          <span className="text-xs text-neutral-500 font-medium font-sans">Published Articles</span>
           <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">{posts.length}</p>
         </div>
 
         <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
-          <span className="text-xs text-neutral-500 font-medium">Total Subscribers</span>
-          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">1,420</p>
-        </div>
-
-        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
-          <span className="text-xs text-neutral-500 font-medium">Reader Engagement</span>
-          <p className="font-serif font-bold text-3xl text-[#FF6719] mt-1">94.8%</p>
+          <span className="text-xs text-neutral-500 font-medium font-sans">Active Themes & Tags</span>
+          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">{totalTags}</p>
         </div>
       </div>
 
       {/* Post List Section */}
       <div className="bg-white dark:bg-[#18181A] rounded-xl border border-[#EDEDEA] dark:border-[#27272A] overflow-hidden">
         <div className="p-4 border-b border-[#EDEDEA] dark:border-[#27272A] flex items-center justify-between gap-4">
-          <span className="font-serif font-bold text-base text-neutral-900 dark:text-white">Posts</span>
+          <span className="font-serif font-bold text-base text-neutral-900 dark:text-white">Articles</span>
           <div className="relative max-w-xs w-full">
             <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search posts..."
+              placeholder="Search articles..."
               className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-[#FCFBF9] dark:bg-[#121214] text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#FF6719]"
             />
           </div>
@@ -133,9 +128,23 @@ export default function AdminDashboardPage() {
         )}
 
         {loading ? (
-          <div className="p-8 text-center text-xs text-neutral-400">Loading publication list...</div>
+          <div className="p-8 text-center text-xs text-neutral-400">Loading articles...</div>
         ) : filteredPosts.length === 0 ? (
-          <div className="p-8 text-center text-xs text-neutral-400">No posts match your search.</div>
+          <div className="p-12 text-center">
+            <p className="font-serif text-base text-neutral-800 dark:text-neutral-200 mb-1">
+              No articles published yet
+            </p>
+            <p className="text-xs text-neutral-500 mb-4">
+              Write and publish an original article to share with your readers.
+            </p>
+            <Link
+              to="/admin/new"
+              className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-[#FF6719] text-white text-xs font-bold"
+            >
+              <PenSquare className="w-3 h-3" />
+              <span>Compose First Article</span>
+            </Link>
+          </div>
         ) : (
           <div className="divide-y divide-[#EDEDEA] dark:divide-[#27272A]">
             {filteredPosts.map((post) => {

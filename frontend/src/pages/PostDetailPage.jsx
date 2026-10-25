@@ -7,15 +7,11 @@ import CommentSection from '../components/CommentSection.jsx';
 import TagBadge from '../components/TagBadge.jsx';
 import {
   ArrowLeft,
-  Calendar,
-  Edit,
-  Trash2,
   Heart,
   MessageSquare,
   Share2,
   Bookmark,
   Check,
-  Crown,
   BookOpen,
   AlertCircle,
 } from 'lucide-react';
@@ -33,7 +29,7 @@ export default function PostDetailPage() {
 
   // Substack interactions
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(38);
+  const [likeCount, setLikeCount] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
   const [subEmail, setSubEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -47,7 +43,9 @@ export default function PostDetailPage() {
       setLoading(true);
       setError(null);
       const res = await api.getPost(id);
-      setPost(res.data.post);
+      const fetched = res.data.post;
+      setPost(fetched);
+      setLikeCount(fetched.likes || 0);
     } catch (err) {
       console.error('Failed to fetch post:', err);
       setError('The requested essay could not be found in the journal archives.');
@@ -82,7 +80,7 @@ export default function PostDetailPage() {
 
   const handleLike = () => {
     if (liked) {
-      setLikeCount((c) => c - 1);
+      setLikeCount((c) => Math.max(0, c - 1));
       setLiked(false);
     } else {
       setLikeCount((c) => c + 1);
@@ -140,9 +138,9 @@ export default function PostDetailPage() {
       })
     : '';
 
-  const wordCount = post.content ? post.content.split(/\s+/).length : 300;
+  const wordCount = post.content ? post.content.split(/\s+/).length : 200;
   const readTime = Math.max(1, Math.ceil(wordCount / 180));
-  const authorName = post.author?.name || 'Elena Rostova';
+  const authorName = post.author?.name || 'Author';
 
   return (
     <article className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
@@ -193,7 +191,7 @@ export default function PostDetailPage() {
               <div className="flex items-center space-x-2">
                 <span className="font-semibold text-sm text-neutral-900 dark:text-white">{authorName}</span>
                 <span className="text-[10px] uppercase font-bold text-[#FF6719] tracking-wider px-1.5 py-0.2 rounded bg-[#FF6719]/10">
-                  Curator
+                  {post.author?.role === 'admin' ? 'Curator' : 'Author'}
                 </span>
               </div>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
@@ -267,7 +265,7 @@ export default function PostDetailPage() {
           Subscribe to Canvas & Prose
         </h3>
         <p className="font-sans text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto mb-6">
-          By Elena Rostova. Deep reflections on Western and world art history, museum retrospectives, and the emotional resonance of artistic craft.
+          Original reflections and critical articles delivered straight to your inbox.
         </p>
 
         <form onSubmit={handleSubscribe} className="max-w-md mx-auto flex items-center gap-2">

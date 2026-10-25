@@ -5,7 +5,7 @@ import TagBadge from './TagBadge.jsx';
 
 export default function PostCard({ post }) {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(() => Math.floor(Math.random() * 24) + 12);
+  const [likeCount, setLikeCount] = useState(post.likes || 0);
   const [bookmarked, setBookmarked] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -16,8 +16,8 @@ export default function PostCard({ post }) {
       })
     : '';
 
-  // Approximate reading time (200 words per minute)
-  const wordCount = post.content ? post.content.split(/\s+/).length : 250;
+  // Approximate reading time (180 words per minute)
+  const wordCount = post.content ? post.content.split(/\s+/).length : 100;
   const readTime = Math.max(1, Math.ceil(wordCount / 180));
 
   // Extract clean excerpt without markdown symbols
@@ -28,13 +28,13 @@ export default function PostCard({ post }) {
         .slice(0, 180) + (post.content.length > 180 ? '...' : '')
     : '';
 
-  const authorName = post.author?.name || 'Elena Rostova';
+  const authorName = post.author?.name || 'Author';
 
   const handleLike = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (liked) {
-      setLikeCount((c) => c - 1);
+      setLikeCount((c) => Math.max(0, c - 1));
       setLiked(false);
     } else {
       setLikeCount((c) => c + 1);
@@ -77,7 +77,7 @@ export default function PostCard({ post }) {
         <h2 className="font-serif font-bold text-2xl sm:text-[1.7rem] text-[#1C1C1C] dark:text-[#F3F3F3] leading-snug tracking-tight group-hover:text-[#FF6719] dark:group-hover:text-[#FF7D3B] transition-colors mb-2">
           {post.title}
         </h2>
-        {/* Subtitle / Dek */}
+        {/* Subtitle / Excerpt */}
         <p className="font-sans text-neutral-600 dark:text-neutral-400 text-sm sm:text-base leading-relaxed line-clamp-2 mb-3.5">
           {excerpt}
         </p>

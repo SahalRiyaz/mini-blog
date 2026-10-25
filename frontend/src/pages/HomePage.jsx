@@ -9,12 +9,9 @@ import {
   Check,
   X,
   Palette,
-  Heart,
-  MessageSquare,
-  Bookmark,
-  Share2,
-  Crown,
+  PenSquare,
   BookOpen,
+  Mail,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -22,14 +19,14 @@ export default function HomePage() {
   const currentTag = searchParams.get('tag') || '';
   const initialSearch = searchParams.get('search') || '';
 
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState(initialSearch);
   const [allTags, setAllTags] = useState([]);
 
-  // Subscribe Box state
+  // Email subscribe input
   const [emailInput, setEmailInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -112,10 +109,10 @@ export default function HomePage() {
         </p>
 
         <p className="mt-2 text-xs uppercase font-sans font-semibold tracking-widest text-neutral-400 dark:text-neutral-500">
-          By Elena Rostova • 1,420 readers
+          A publication of original writings & critiques
         </p>
 
-        {/* Signature Substack Email Subscribe Box */}
+        {/* Substack Email Subscribe Box */}
         <form onSubmit={handleSubscribe} className="mt-7 max-w-md mx-auto flex items-center gap-2 px-2">
           <input
             type="email"
@@ -143,12 +140,12 @@ export default function HomePage() {
 
       {/* Two-Column Substack Publication Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Main Feed Column (Articles) */}
+        {/* Main Feed Column */}
         <div className="lg:col-span-8">
           {/* Search / Filter notice bar */}
           <div className="flex items-center justify-between mb-8 pb-3 border-b border-[#EDEDEA] dark:border-[#27272A]">
             <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-sans">
-              {isFiltering ? 'Search Results' : 'Latest Essays'}
+              {isFiltering ? 'Search Results' : 'Articles'}
             </span>
 
             {isFiltering && (
@@ -158,7 +155,7 @@ export default function HomePage() {
                 className="inline-flex items-center space-x-1 text-xs font-semibold text-[#FF6719] hover:underline"
               >
                 <X className="w-3 h-3" />
-                <span>Reset filters</span>
+                <span>Reset search</span>
               </button>
             )}
           </div>
@@ -166,7 +163,7 @@ export default function HomePage() {
           {/* Posts Feed */}
           {loading ? (
             <div className="space-y-8 animate-pulse">
-              {[1, 2, 3].map((n) => (
+              {[1, 2].map((n) => (
                 <div key={n} className="border-b border-[#EDEDEA] dark:border-[#27272A] pb-8 space-y-3">
                   <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/4"></div>
                   <div className="h-7 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
@@ -175,21 +172,38 @@ export default function HomePage() {
               ))}
             </div>
           ) : posts.length === 0 ? (
-            <div className="text-center py-16 border border-dashed border-neutral-300 dark:border-neutral-800 rounded-2xl">
-              <BookOpen className="w-10 h-10 text-neutral-300 dark:text-neutral-600 mx-auto mb-2" />
-              <h3 className="font-serif font-bold text-lg text-neutral-800 dark:text-neutral-200">No essays found</h3>
-              <p className="text-sm text-neutral-500 mt-1 mb-4">
+            <div className="text-center py-16 px-4 border border-dashed border-neutral-300 dark:border-neutral-800 rounded-2xl bg-white dark:bg-[#18181A]">
+              <div className="w-12 h-12 rounded-full bg-[#FF6719]/10 text-[#FF6719] flex items-center justify-center mx-auto mb-3">
+                <PenSquare className="w-6 h-6" />
+              </div>
+              <h3 className="font-serif font-bold text-xl text-neutral-900 dark:text-white">
+                No articles published yet
+              </h3>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto mt-2 mb-6">
                 {isFiltering
-                  ? 'Try searching with different artistic movements or themes.'
-                  : 'The journal archive is currently empty.'}
+                  ? 'No published articles match your current inquiry.'
+                  : 'This publication only presents original articles composed by registered authors and curators.'}
               </p>
-              {isFiltering && (
+
+              {isAdmin ? (
+                <Link
+                  to="/admin/new"
+                  className="inline-flex items-center space-x-1.5 px-6 py-2.5 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
+                >
+                  <PenSquare className="w-3.5 h-3.5" />
+                  <span>Write the First Article</span>
+                </Link>
+              ) : isFiltering ? (
                 <button
                   onClick={clearFilters}
                   className="px-4 py-1.5 text-xs font-semibold text-[#FF6719] hover:underline"
                 >
-                  Clear search
+                  Clear search filters
                 </button>
+              ) : (
+                <div className="text-xs text-neutral-400 font-serif italic">
+                  Sign in or subscribe above to be notified as soon as new pieces are published.
+                </div>
               )}
             </div>
           ) : (
@@ -223,19 +237,19 @@ export default function HomePage() {
               About Canvas & Prose
             </h3>
             <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
-              A private journal dedicated to in-depth reflections on Western and world art history, museum retrospectives, and the emotional resonance of artistic craft.
+              A private digital publication dedicated to genuine critical essays on visual arts, exhibitions, and creative craft written by contributors.
             </p>
             <div className="pt-3 border-t border-[#EDEDEA] dark:border-[#27272A] text-xs text-neutral-500 flex items-center justify-between">
-              <span>Published by Elena Rostova</span>
-              <span className="font-semibold text-[#FF6719]">Weekly</span>
+              <span>Articles</span>
+              <span className="font-semibold text-neutral-800 dark:text-neutral-200">{posts.length} published</span>
             </div>
           </div>
 
-          {/* Curated Themes / Tags */}
+          {/* Curated Themes (Only shown when real tags exist) */}
           {allTags.length > 0 && (
             <div className="bg-white dark:bg-[#18181A] p-6 rounded-2xl border border-[#EDEDEA] dark:border-[#27272A] shadow-sm">
               <h3 className="font-serif font-bold text-base text-neutral-900 dark:text-white mb-3">
-                Themes & Periods
+                Themes & Topics
               </h3>
               <div className="flex flex-wrap gap-1.5">
                 {allTags.map((tag) => (
@@ -245,22 +259,39 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Substack Community / Patron Card */}
-          <div className="p-6 rounded-2xl bg-[#FF6719]/5 dark:bg-[#FF6719]/10 border border-[#FF6719]/20 text-center">
-            <Crown className="w-6 h-6 text-[#FF6719] mx-auto mb-2" />
-            <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-white mb-1">
-              Join the Art Circle
-            </h4>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
-              Subscribers receive full essays, archive access, and invitation to reader dialogue.
-            </p>
-            <Link
-              to="/register"
-              className="inline-block w-full py-2 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
-            >
-              Get Free Subscription
-            </Link>
-          </div>
+          {/* Curator Action or Membership invitation */}
+          {isAdmin ? (
+            <div className="p-6 rounded-2xl bg-[#FF6719]/5 dark:bg-[#FF6719]/10 border border-[#FF6719]/20 text-center">
+              <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-white mb-1">
+                Curator Publishing
+              </h4>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+                You are signed in as a curator. You can compose and publish original articles at any time.
+              </p>
+              <Link
+                to="/admin/new"
+                className="inline-block w-full py-2 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
+              >
+                Compose New Essay
+              </Link>
+            </div>
+          ) : (
+            <div className="p-6 rounded-2xl bg-neutral-100/70 dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A] text-center">
+              <Mail className="w-5 h-5 text-neutral-500 mx-auto mb-2" />
+              <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-white mb-1">
+                Newsletter
+              </h4>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+                Receive new writings as soon as authors release them.
+              </p>
+              <Link
+                to="/register"
+                className="inline-block w-full py-2 rounded-full bg-neutral-900 hover:bg-neutral-800 dark:bg-[#FF6719] dark:hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
+              >
+                Subscribe Free
+              </Link>
+            </div>
+          )}
         </aside>
       </div>
     </div>
