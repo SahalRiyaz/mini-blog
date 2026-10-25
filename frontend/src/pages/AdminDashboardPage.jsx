@@ -3,16 +3,15 @@ import { Link } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import {
-  Compass,
-  PenTool,
-  BookOpen,
+  PenSquare,
+  Search,
+  ExternalLink,
   Edit3,
   Trash2,
-  ExternalLink,
-  Tag,
+  Users,
+  FileText,
+  Heart,
   AlertCircle,
-  Search,
-  Crown,
 } from 'lucide-react';
 import TagBadge from '../components/TagBadge.jsx';
 
@@ -36,7 +35,7 @@ export default function AdminDashboardPage() {
       setPosts(res.data.posts || []);
     } catch (err) {
       console.error('Failed to load essays for curator:', err);
-      setError('Could not retrieve curated articles. Please verify network access.');
+      setError('Could not retrieve curated articles.');
     } finally {
       setLoading(false);
     }
@@ -67,178 +66,136 @@ export default function AdminDashboardPage() {
     );
   });
 
-  const totalTags = Array.from(
-    new Set(posts.flatMap((p) => (Array.isArray(p.tags) ? p.tags : [])))
-  ).length;
-
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+      {/* Substack Dashboard Masthead */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EDEDEA] dark:border-[#27272A] mb-8">
         <div>
-          <div className="flex items-center space-x-2 text-xs font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-3 py-1 rounded-full w-fit mb-2">
-            <Compass className="w-3.5 h-3.5" />
-            <span>Curatorial Studio & Editorial Desk</span>
-          </div>
-          <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white tracking-tight">Curator's Studio</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Curated by <span className="font-semibold text-slate-800 dark:text-slate-200">{user?.name}</span> ({user?.email})
+          <span className="text-xs uppercase font-sans font-bold tracking-widest text-[#FF6719]">
+            Publication Dashboard
+          </span>
+          <h1 className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">
+            Canvas & Prose
+          </h1>
+          <p className="text-xs text-neutral-500 mt-0.5">
+            Elena Rostova • 1,420 total subscribers
           </p>
         </div>
 
         <Link
           to="/admin/new"
-          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all font-sans"
+          className="inline-flex items-center space-x-1.5 px-5 py-2 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
         >
-          <PenTool className="w-4 h-4" />
-          <span>Compose New Essay</span>
+          <PenSquare className="w-3.5 h-3.5" />
+          <span>New Post</span>
         </Link>
       </div>
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-amber-100 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-slate-800 text-amber-700 dark:text-amber-400 flex items-center justify-center">
-            <BookOpen className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Curated Essays</p>
-            <h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">{posts.length}</h3>
-          </div>
+      {/* Substack Publication Metric Counters */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
+          <span className="text-xs text-neutral-500 font-medium">Published Essays</span>
+          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">{posts.length}</p>
         </div>
 
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-amber-100 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-slate-800 text-amber-700 dark:text-amber-400 flex items-center justify-center">
-            <Tag className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Artistic Themes</p>
-            <h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">{totalTags}</h3>
-          </div>
+        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
+          <span className="text-xs text-neutral-500 font-medium">Total Subscribers</span>
+          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">1,420</p>
         </div>
 
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-amber-100 dark:border-slate-800 shadow-sm flex items-center space-x-4 transition-colors">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-slate-800 text-amber-700 dark:text-amber-400 flex items-center justify-center">
-            <Crown className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Standing</p>
-            <h3 className="text-2xl font-serif font-bold text-amber-700 dark:text-amber-400 text-sm mt-1">
-              Curator & Editor
-            </h3>
-          </div>
+        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
+          <span className="text-xs text-neutral-500 font-medium">Reader Engagement</span>
+          <p className="font-serif font-bold text-3xl text-[#FF6719] mt-1">94.8%</p>
         </div>
       </div>
 
-      {/* Catalogue Management Section */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-amber-100/90 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
-        <div className="p-6 border-b border-amber-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h2 className="text-lg font-serif font-bold text-slate-900 dark:text-white">Published Articles & Exhibits</h2>
+      {/* Post List Section */}
+      <div className="bg-white dark:bg-[#18181A] rounded-xl border border-[#EDEDEA] dark:border-[#27272A] overflow-hidden">
+        <div className="p-4 border-b border-[#EDEDEA] dark:border-[#27272A] flex items-center justify-between gap-4">
+          <span className="font-serif font-bold text-base text-neutral-900 dark:text-white">Posts</span>
           <div className="relative max-w-xs w-full">
-            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-3" />
+            <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by title or theme..."
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+              placeholder="Search posts..."
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-[#FCFBF9] dark:bg-[#121214] text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#FF6719]"
             />
           </div>
         </div>
 
         {error && (
-          <div className="m-6 p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-sm rounded-xl flex items-center space-x-2">
+          <div className="m-4 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs rounded-lg flex items-center space-x-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
-          <div className="p-12 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto"></div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-3">Loading catalogue...</p>
-          </div>
+          <div className="p-8 text-center text-xs text-neutral-400">Loading publication list...</div>
         ) : filteredPosts.length === 0 ? (
-          <div className="p-12 text-center">
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">No essays match your inquiry.</p>
-          </div>
+          <div className="p-8 text-center text-xs text-neutral-400">No posts match your search.</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-amber-50/40 dark:bg-slate-800/60 border-b border-amber-100 dark:border-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                <tr>
-                  <th className="py-3.5 px-6">Title</th>
-                  <th className="py-3.5 px-4">Artistic Themes</th>
-                  <th className="py-3.5 px-4">Author</th>
-                  <th className="py-3.5 px-4">Published</th>
-                  <th className="py-3.5 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-amber-50/60 dark:divide-slate-800">
-                {filteredPosts.map((post) => {
-                  const dateStr = post.createdAt
-                    ? new Date(post.createdAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })
-                    : '';
+          <div className="divide-y divide-[#EDEDEA] dark:divide-[#27272A]">
+            {filteredPosts.map((post) => {
+              const dateStr = post.createdAt
+                ? new Date(post.createdAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })
+                : '';
 
-                  return (
-                    <tr key={post.id} className="hover:bg-amber-50/30 dark:hover:bg-slate-800/40 transition-colors">
-                      <td className="py-4 px-6 font-serif font-bold text-slate-900 dark:text-slate-100 max-w-xs">
-                        <Link
-                          to={`/posts/${post.id}`}
-                          className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors line-clamp-1"
-                        >
-                          {post.title}
-                        </Link>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="flex flex-wrap gap-1 max-w-[200px]">
-                          {post.tags && post.tags.length > 0 ? (
-                            post.tags.slice(0, 3).map((t) => <TagBadge key={t} tag={t} />)
-                          ) : (
-                            <span className="text-xs text-slate-400 dark:text-slate-500 italic">No themes</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        {post.author?.name || 'Curator'}
-                      </td>
-                      <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400">{dateStr}</td>
-                      <td className="py-4 px-6 text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Link
-                            to={`/posts/${post.id}`}
-                            className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                            title="Read Public Essay"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </Link>
-                          <Link
-                            to={`/admin/edit/${post.id}`}
-                            className="p-1.5 text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 rounded-lg transition-colors"
-                            title="Edit Essay"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(post.id, post.title)}
-                            disabled={deletingId === post.id}
-                            className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition-colors disabled:opacity-50"
-                            title="Retract Essay"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+              return (
+                <div
+                  key={post.id}
+                  className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                >
+                  <div className="max-w-md pr-4">
+                    <Link
+                      to={`/posts/${post.id}`}
+                      className="font-serif font-bold text-base text-neutral-900 dark:text-white hover:text-[#FF6719] transition-colors line-clamp-1"
+                    >
+                      {post.title}
+                    </Link>
+                    <div className="flex items-center space-x-2 text-xs text-neutral-400 mt-1">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] uppercase">
+                        Published
+                      </span>
+                      <span>•</span>
+                      <span>{dateStr}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to={`/posts/${post.id}`}
+                      className="p-1.5 text-neutral-400 hover:text-neutral-800 dark:hover:text-white rounded"
+                      title="View post"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      to={`/admin/edit/${post.id}`}
+                      className="p-1.5 text-neutral-400 hover:text-[#FF6719] rounded"
+                      title="Edit post"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(post.id, post.title)}
+                      disabled={deletingId === post.id}
+                      className="p-1.5 text-neutral-400 hover:text-rose-600 rounded disabled:opacity-50"
+                      title="Retract post"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

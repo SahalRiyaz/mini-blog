@@ -1,90 +1,144 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MessageSquare, ArrowRight, Crown } from 'lucide-react';
+import { Heart, MessageSquare, Share2, Bookmark, Check } from 'lucide-react';
 import TagBadge from './TagBadge.jsx';
 
 export default function PostCard({ post }) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(() => Math.floor(Math.random() * 24) + 12);
+  const [bookmarked, setBookmarked] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   const formattedDate = post.createdAt
     ? new Date(post.createdAt).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric',
       })
     : '';
 
+  // Approximate reading time (200 words per minute)
+  const wordCount = post.content ? post.content.split(/\s+/).length : 250;
+  const readTime = Math.max(1, Math.ceil(wordCount / 180));
+
+  // Extract clean excerpt without markdown symbols
   const excerpt = post.content
     ? post.content
         .replace(/[#*`_~>[\]()-]/g, '')
         .trim()
-        .slice(0, 160) + (post.content.length > 160 ? '...' : '')
+        .slice(0, 180) + (post.content.length > 180 ? '...' : '')
     : '';
 
-  const authorName = post.author?.name || 'Curator Elena';
-  const authorRole = post.author?.role || 'admin';
+  const authorName = post.author?.name || 'Elena Rostova';
+
+  const handleLike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (liked) {
+      setLikeCount((c) => c - 1);
+      setLiked(false);
+    } else {
+      setLikeCount((c) => c + 1);
+      setLiked(true);
+    }
+  };
+
+  const handleBookmark = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setBookmarked(!bookmarked);
+  };
+
+  const handleShare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(`${window.location.origin}/posts/${post.id}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
-    <article className="group bg-white dark:bg-slate-900 rounded-2xl border border-amber-100/90 dark:border-slate-800 p-6 shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700/60 transition-all flex flex-col justify-between">
-      <div>
-        {/* Author & Date metadata */}
-        <div className="flex items-center justify-between mb-3 text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold text-[10px]">
-              {authorName.charAt(0).toUpperCase()}
-            </div>
-            <span className="font-medium text-slate-700 dark:text-slate-300">{authorName}</span>
-            {authorRole === 'admin' && (
-              <span className="inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 text-[10px] font-semibold border border-amber-200 dark:border-amber-800">
-                <Crown className="w-2.5 h-2.5 mr-0.5 text-amber-600" />
-                Curator
-              </span>
-            )}
-          </div>
-          <div className="flex items-center space-x-1">
-            <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
-            <span>{formattedDate}</span>
-          </div>
+    <article className="border-b border-[#EDEDEA] dark:border-[#27272A] pb-8 mb-8 last:border-b-0 transition-colors group">
+      {/* Top Byline Row */}
+      <div className="flex items-center space-x-2 text-xs text-neutral-500 dark:text-neutral-400 mb-2.5">
+        <div className="w-5 h-5 rounded-full bg-[#FF6719]/10 text-[#FF6719] flex items-center justify-center font-bold text-[10px]">
+          {authorName.charAt(0).toUpperCase()}
         </div>
-
-        {/* Title */}
-        <Link to={`/posts/${post.id}`}>
-          <h2 className="text-xl font-serif font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors line-clamp-2 mb-2 leading-snug">
-            {post.title}
-          </h2>
-        </Link>
-
-        {/* Excerpt */}
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3 font-sans">
-          {excerpt}
-        </p>
+        <span className="font-semibold text-neutral-800 dark:text-neutral-200">{authorName}</span>
+        <span>•</span>
+        <span>{formattedDate}</span>
+        <span>•</span>
+        <span>{readTime} min read</span>
       </div>
 
-      <div>
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {post.tags.map((tag) => (
-              <TagBadge key={tag} tag={tag} />
-            ))}
-          </div>
-        )}
+      {/* Main Headline */}
+      <Link to={`/posts/${post.id}`} className="block">
+        <h2 className="font-serif font-bold text-2xl sm:text-[1.7rem] text-[#1C1C1C] dark:text-[#F3F3F3] leading-snug tracking-tight group-hover:text-[#FF6719] dark:group-hover:text-[#FF7D3B] transition-colors mb-2">
+          {post.title}
+        </h2>
+        {/* Subtitle / Dek */}
+        <p className="font-sans text-neutral-600 dark:text-neutral-400 text-sm sm:text-base leading-relaxed line-clamp-2 mb-3.5">
+          {excerpt}
+        </p>
+      </Link>
 
-        {/* Card Footer */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-          <Link
-            to={`/posts/${post.id}`}
-            className="inline-flex items-center text-xs font-semibold text-amber-700 dark:text-amber-400 group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors space-x-1"
+      {/* Tags */}
+      {post.tags && post.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {post.tags.map((tag) => (
+            <TagBadge key={tag} tag={tag} />
+          ))}
+        </div>
+      )}
+
+      {/* Substack Bottom Engagement Bar */}
+      <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+        <div className="flex items-center space-x-4">
+          {/* Like Heart */}
+          <button
+            type="button"
+            onClick={handleLike}
+            className={`flex items-center space-x-1.5 transition-colors ${
+              liked ? 'text-rose-600' : 'hover:text-neutral-800 dark:hover:text-neutral-200'
+            }`}
           >
-            <span>Read full essay</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+            <Heart className={`w-4 h-4 ${liked ? 'fill-rose-600 text-rose-600' : ''}`} />
+            <span className="font-medium">{likeCount}</span>
+          </button>
 
+          {/* Comments link */}
           <Link
             to={`/posts/${post.id}#comments`}
-            className="inline-flex items-center space-x-1 text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+            className="flex items-center space-x-1.5 hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Reflections</span>
+            <MessageSquare className="w-4 h-4" />
+            <span className="font-medium">Reflect</span>
           </Link>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          {/* Share */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="p-1 hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors"
+            title="Copy link"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+          </button>
+
+          {/* Bookmark */}
+          <button
+            type="button"
+            onClick={handleBookmark}
+            className={`p-1 transition-colors ${
+              bookmarked ? 'text-[#FF6719]' : 'hover:text-neutral-800 dark:hover:text-neutral-200'
+            }`}
+            title="Save essay"
+          >
+            <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-[#FF6719]' : ''}`} />
+          </button>
         </div>
       </div>
     </article>

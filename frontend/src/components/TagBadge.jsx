@@ -25,8 +25,8 @@ export default function TagBadge({ tag, active = false, onClick }) {
       onClick={handleClick}
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-all ${
         active
-          ? 'bg-brand-600 text-white shadow-sm ring-2 ring-brand-300 dark:ring-brand-800'
-          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700'
+          ? 'bg-[#FF6719] text-white shadow-sm'
+          : 'bg-[#F2F1ED] dark:bg-[#1F1F23] text-neutral-600 dark:text-neutral-300 hover:bg-[#E5E3DC] dark:hover:bg-[#2A2A2E]'
       }`}
     >
       #{tag}

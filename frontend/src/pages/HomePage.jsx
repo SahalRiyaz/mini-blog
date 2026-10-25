@@ -4,7 +4,18 @@ import { api } from '../api/client.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import PostCard from '../components/PostCard.jsx';
 import TagBadge from '../components/TagBadge.jsx';
-import { Search, Sparkles, X, PenTool, BookOpen, AlertCircle } from 'lucide-react';
+import {
+  Search,
+  Check,
+  X,
+  Palette,
+  Heart,
+  MessageSquare,
+  Bookmark,
+  Share2,
+  Crown,
+  BookOpen,
+} from 'lucide-react';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +28,10 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [searchInput, setSearchInput] = useState(initialSearch);
   const [allTags, setAllTags] = useState([]);
+
+  // Subscribe Box state
+  const [emailInput, setEmailInput] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -68,150 +83,186 @@ export default function HomePage() {
     setSearchParams({});
   };
 
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (!emailInput.trim()) return;
+    setSubscribed(true);
+    setTimeout(() => {
+      setEmailInput('');
+      setSubscribed(false);
+    }, 4000);
+  };
+
   const isFiltering = Boolean(currentTag || searchParams.get('search'));
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Hero Section */}
-      <section className="text-center py-14 md:py-20 bg-gradient-to-b from-amber-50/70 via-white to-transparent dark:from-slate-900/80 dark:via-slate-900/40 dark:to-transparent rounded-3xl border border-amber-100 dark:border-slate-800 p-6 md:p-14 mb-14 shadow-sm relative overflow-hidden transition-colors">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-100/80 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-semibold mb-5 border border-amber-200 dark:border-amber-800 font-sans tracking-wide">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-          <span>A Curated Journal of Art, Aesthetics & Cultural Inquiry</span>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      {/* Substack Publication Masthead */}
+      <section className="text-center py-10 md:py-14 border-b border-[#EDEDEA] dark:border-[#27272A] mb-10 transition-colors">
+        <div className="w-16 h-16 rounded-full bg-[#FF6719]/10 text-[#FF6719] border-2 border-[#FF6719]/30 flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <Palette className="w-8 h-8" />
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-slate-900 dark:text-white tracking-tight max-w-3xl mx-auto leading-tight">
-          Where pigment, light, and thought <span className="italic font-serif text-amber-700 dark:text-amber-400">converge</span>.
+        <h1 className="font-serif font-bold text-4xl sm:text-5xl md:text-6xl text-[#1C1C1C] dark:text-white tracking-tight leading-tight">
+          Canvas & Prose
         </h1>
 
-        <p className="mt-5 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-sans leading-relaxed">
-          Exploring the masterpieces of classical antiquity, Renaissance innovations, Impressionist revolutions, and the philosophical contemplation of visual form.
+        <p className="mt-3 font-serif text-lg sm:text-xl text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto italic">
+          Essays on painting, sculpture, and the timeless contemplation of visual form.
         </p>
 
-        {/* Search Bar */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="mt-8 max-w-xl mx-auto relative flex items-center"
-        >
-          <div className="absolute left-4 text-slate-400 dark:text-slate-500">
-            <Search className="w-5 h-5" />
-          </div>
+        <p className="mt-2 text-xs uppercase font-sans font-semibold tracking-widest text-neutral-400 dark:text-neutral-500">
+          By Elena Rostova • 1,420 readers
+        </p>
+
+        {/* Signature Substack Email Subscribe Box */}
+        <form onSubmit={handleSubscribe} className="mt-7 max-w-md mx-auto flex items-center gap-2 px-2">
           <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search essays, artists, movements, or periods..."
-            className="w-full pl-12 pr-28 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200/80 dark:border-slate-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            type="email"
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+            placeholder="Type your email..."
+            required
+            className="flex-1 px-4 py-2.5 rounded-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#18181A] text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#FF6719]/30 focus:border-[#FF6719] transition-all"
           />
           <button
             type="submit"
-            className="absolute right-2 px-5 py-2 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white rounded-xl text-xs font-semibold shadow-sm transition-all"
+            className="px-6 py-2.5 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-sm font-bold tracking-tight shadow-sm hover:shadow transition-all flex items-center space-x-1"
           >
-            Discover
+            {subscribed ? (
+              <>
+                <Check className="w-4 h-4 mr-1" />
+                <span>Subscribed!</span>
+              </>
+            ) : (
+              <span>Subscribe</span>
+            )}
           </button>
         </form>
-
-        {/* Tags bar */}
-        {allTags.length > 0 && (
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
-            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
-              Curated Themes:
-            </span>
-            {allTags.map((tag) => (
-              <TagBadge key={tag} tag={tag} active={currentTag === tag} />
-            ))}
-          </div>
-        )}
       </section>
 
-      {/* Filter notification and Curator Action */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-            {isFiltering ? 'Curated Selections' : 'Featured Essays & Articles'}
-          </h2>
-          {isFiltering && (
-            <div className="flex items-center space-x-2 mt-1">
-              <span className="text-xs text-slate-500 dark:text-slate-400">
-                Filtered by {currentTag && `theme: #${currentTag}`} {searchParams.get('search') && `inquiry: "${searchParams.get('search')}"`}
-              </span>
+      {/* Two-Column Substack Publication Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        {/* Main Feed Column (Articles) */}
+        <div className="lg:col-span-8">
+          {/* Search / Filter notice bar */}
+          <div className="flex items-center justify-between mb-8 pb-3 border-b border-[#EDEDEA] dark:border-[#27272A]">
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-sans">
+              {isFiltering ? 'Search Results' : 'Latest Essays'}
+            </span>
+
+            {isFiltering && (
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex items-center space-x-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-900"
+                className="inline-flex items-center space-x-1 text-xs font-semibold text-[#FF6719] hover:underline"
               >
                 <X className="w-3 h-3" />
-                <span>Clear filter</span>
+                <span>Reset filters</span>
               </button>
+            )}
+          </div>
+
+          {/* Posts Feed */}
+          {loading ? (
+            <div className="space-y-8 animate-pulse">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="border-b border-[#EDEDEA] dark:border-[#27272A] pb-8 space-y-3">
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-1/4"></div>
+                  <div className="h-7 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
+                  <div className="h-12 bg-neutral-100 dark:bg-neutral-850 rounded"></div>
+                </div>
+              ))}
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-16 border border-dashed border-neutral-300 dark:border-neutral-800 rounded-2xl">
+              <BookOpen className="w-10 h-10 text-neutral-300 dark:text-neutral-600 mx-auto mb-2" />
+              <h3 className="font-serif font-bold text-lg text-neutral-800 dark:text-neutral-200">No essays found</h3>
+              <p className="text-sm text-neutral-500 mt-1 mb-4">
+                {isFiltering
+                  ? 'Try searching with different artistic movements or themes.'
+                  : 'The journal archive is currently empty.'}
+              </p>
+              {isFiltering && (
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-1.5 text-xs font-semibold text-[#FF6719] hover:underline"
+                >
+                  Clear search
+                </button>
+              )}
+            </div>
+          ) : (
+            <div>
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
             </div>
           )}
         </div>
 
-        {isAdmin && (
-          <Link
-            to="/admin/new"
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold shadow-sm transition-all"
-          >
-            <PenTool className="w-4 h-4" />
-            <span>Compose New Essay</span>
-          </Link>
-        )}
-      </div>
+        {/* Substack Right Sidebar Column */}
+        <aside className="lg:col-span-4 space-y-8">
+          {/* Quick Search Widget */}
+          <div className="bg-white dark:bg-[#18181A] p-4 rounded-xl border border-[#EDEDEA] dark:border-[#27272A] shadow-sm">
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search archive..."
+                className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-[#FCFBF9] dark:bg-[#121214] text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#FF6719]"
+              />
+            </form>
+          </div>
 
-      {/* Error state */}
-      {error && (
-        <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 rounded-2xl flex items-center space-x-3 mb-8">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
-          <p className="text-sm font-medium">{error}</p>
-        </div>
-      )}
-
-      {/* Posts Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((n) => (
-            <div
-              key={n}
-              className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 animate-pulse"
-            >
-              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
-              <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
-              <div className="h-16 bg-slate-100 dark:bg-slate-800 rounded"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+          {/* About Publication Card */}
+          <div className="bg-white dark:bg-[#18181A] p-6 rounded-2xl border border-[#EDEDEA] dark:border-[#27272A] shadow-sm">
+            <h3 className="font-serif font-bold text-lg text-neutral-900 dark:text-white mb-2">
+              About Canvas & Prose
+            </h3>
+            <p className="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+              A private journal dedicated to in-depth reflections on Western and world art history, museum retrospectives, and the emotional resonance of artistic craft.
+            </p>
+            <div className="pt-3 border-t border-[#EDEDEA] dark:border-[#27272A] text-xs text-neutral-500 flex items-center justify-between">
+              <span>Published by Elena Rostova</span>
+              <span className="font-semibold text-[#FF6719]">Weekly</span>
             </div>
-          ))}
-        </div>
-      ) : posts.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
-          <BookOpen className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-serif font-bold text-slate-700 dark:text-slate-200">No essays found</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1 mb-6">
-            {isFiltering
-              ? 'Try searching with different artistic movements or resetting active theme filters.'
-              : 'Our editorial desk has not published essays yet. Curators can begin writing!'}
-          </p>
-          {isFiltering ? (
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 rounded-xl transition-colors"
-            >
-              Reset Filters
-            </button>
-          ) : isAdmin ? (
+          </div>
+
+          {/* Curated Themes / Tags */}
+          {allTags.length > 0 && (
+            <div className="bg-white dark:bg-[#18181A] p-6 rounded-2xl border border-[#EDEDEA] dark:border-[#27272A] shadow-sm">
+              <h3 className="font-serif font-bold text-base text-neutral-900 dark:text-white mb-3">
+                Themes & Periods
+              </h3>
+              <div className="flex flex-wrap gap-1.5">
+                {allTags.map((tag) => (
+                  <TagBadge key={tag} tag={tag} active={currentTag === tag} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Substack Community / Patron Card */}
+          <div className="p-6 rounded-2xl bg-[#FF6719]/5 dark:bg-[#FF6719]/10 border border-[#FF6719]/20 text-center">
+            <Crown className="w-6 h-6 text-[#FF6719] mx-auto mb-2" />
+            <h4 className="font-serif font-bold text-sm text-neutral-900 dark:text-white mb-1">
+              Join the Art Circle
+            </h4>
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+              Subscribers receive full essays, archive access, and invitation to reader dialogue.
+            </p>
             <Link
-              to="/admin/new"
-              className="px-4 py-2 text-xs font-semibold text-white bg-amber-600 rounded-xl"
+              to="/register"
+              className="inline-block w-full py-2 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
             >
-              Compose Essay
+              Get Free Subscription
             </Link>
-          ) : null}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      )}
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

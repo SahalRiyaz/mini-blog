@@ -4,7 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import { api } from '../api/client.js';
 import {
   ArrowLeft,
-  Save,
   Eye,
   Edit,
   Code,
@@ -16,7 +15,6 @@ import {
   Link2,
   AlertCircle,
   Tag,
-  Feather,
 } from 'lucide-react';
 
 export default function PostEditorPage() {
@@ -49,7 +47,7 @@ export default function PostEditorPage() {
       setTagsInput(post.tags ? post.tags.join(', ') : '');
     } catch (err) {
       console.error('Failed to load essay for editing:', err);
-      setError('Could not load essay text. Please return to the studio.');
+      setError('Could not load essay text. Please return to the dashboard.');
     } finally {
       setLoading(false);
     }
@@ -112,188 +110,167 @@ export default function PostEditorPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto"></div>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 font-serif">Opening essay manuscript...</p>
+      <div className="max-w-2xl mx-auto px-4 py-20 text-center animate-pulse">
+        <div className="h-6 bg-neutral-200 dark:bg-neutral-800 rounded w-1/3 mx-auto mb-4"></div>
+        <p className="text-xs text-neutral-400">Loading manuscript...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+      {/* Substack Writer Top Bar */}
+      <div className="flex items-center justify-between pb-4 border-b border-[#EDEDEA] dark:border-[#27272A] mb-8">
         <Link
           to="/admin"
-          className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors"
+          className="inline-flex items-center space-x-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Return to Curator Studio</span>
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Dashboard</span>
         </Link>
 
         <div className="flex items-center space-x-3">
-          <Link
-            to="/admin"
-            className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl transition-colors"
-          >
-            Discard
-          </Link>
+          {/* Mode Switcher */}
+          <div className="flex items-center space-x-1 bg-neutral-100 dark:bg-neutral-800 p-0.5 rounded-full text-xs">
+            <button
+              type="button"
+              onClick={() => setActiveTab('write')}
+              className={`px-3 py-1 rounded-full font-medium transition-all ${
+                activeTab === 'write'
+                  ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900'
+              }`}
+            >
+              Write
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('preview')}
+              className={`px-3 py-1 rounded-full font-medium transition-all ${
+                activeTab === 'preview'
+                  ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-xs'
+                  : 'text-neutral-500 hover:text-neutral-900'
+              }`}
+            >
+              Preview
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={handleSubmit}
             disabled={saving}
-            className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-700 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md transition-all font-sans"
+            className="px-5 py-1.5 rounded-full bg-[#FF6719] hover:bg-[#E5530B] disabled:opacity-50 text-white font-bold text-xs tracking-tight shadow-sm transition-all"
           >
-            <Save className="w-4 h-4" />
-            <span>{saving ? 'Publishing...' : isEditing ? 'Update Article' : 'Publish to Journal'}</span>
+            {saving ? 'Publishing...' : isEditing ? 'Update' : 'Publish'}
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-sm rounded-2xl flex items-center space-x-2">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+        <div className="mb-6 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs rounded-lg flex items-center space-x-2">
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Editor Card */}
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-3xl border border-amber-100/90 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6 transition-colors">
+      {/* Editor Body */}
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-sans">
-            Essay Title
-          </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. The Architecture of Silence: Morandi’s Still Lifes and the Poetics of the Everyday"
+            placeholder="Title"
             required
-            className="w-full px-4 py-3 text-lg font-serif font-bold rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+            className="w-full font-serif font-bold text-3xl sm:text-4xl text-[#1C1C1C] dark:text-white placeholder:text-neutral-300 dark:placeholder:text-neutral-600 bg-transparent border-none focus:outline-none focus:ring-0 px-0"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 flex items-center space-x-1 font-sans">
-            <Tag className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
-            <span>Artistic Themes & Movements (comma separated)</span>
-          </label>
           <input
             type="text"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
-            placeholder="modern-art, painting, aesthetics, exhibition, still-life"
-            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+            placeholder="Add tags (e.g. painting, baroque, vermeer)..."
+            className="w-full text-xs font-sans text-neutral-600 dark:text-neutral-400 placeholder:text-neutral-400 bg-transparent border-b border-[#EDEDEA] dark:border-[#27272A] pb-2 focus:outline-none focus:border-[#FF6719] px-0"
           />
         </div>
 
-        {/* Toolbar & Tab Switcher */}
-        <div>
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-amber-100 dark:border-slate-800 mb-3">
-            {/* Toolbar Buttons */}
-            <div className="flex flex-wrap items-center gap-1">
-              <button
-                type="button"
-                onClick={() => insertMarkdown('**', '**')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Bold"
-              >
-                <Bold className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('*', '*')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Italic"
-              >
-                <Italic className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('## ')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Heading 2"
-              >
-                <Heading className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('> ')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Blockquote / Critical Citation"
-              >
-                <Quote className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('- ')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Catalog List"
-              >
-                <List className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('[', '](https://example.com)')}
-                className="p-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                title="Reference Link"
-              >
-                <Link2 className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Mode Switcher */}
-            <div className="flex items-center space-x-1 bg-amber-50 dark:bg-slate-800 p-1 rounded-xl">
-              <button
-                type="button"
-                onClick={() => setActiveTab('write')}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === 'write'
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Edit className="w-3.5 h-3.5" />
-                <span>Writing Desk</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('preview')}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === 'preview'
-                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                <Eye className="w-3.5 h-3.5" />
-                <span>Reader Preview</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Editor or Preview Pane */}
-          {activeTab === 'write' ? (
-            <textarea
-              id="post-content-textarea"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Compose your article in Markdown here...&#10;&#10;## Visual Analysis&#10;Reflections on the artist's brushwork, palette, and emotional resonance...&#10;&#10;> 'Every canvas is a journey into a foreign harbor.'"
-              rows={16}
-              required
-              className="w-full p-4 font-mono text-sm rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-y leading-relaxed transition-colors"
-            />
-          ) : (
-            <div className="min-h-[384px] p-6 bg-slate-50/50 dark:bg-slate-950/60 rounded-2xl border border-amber-100 dark:border-slate-800 overflow-y-auto">
-              {content.trim() ? (
-                <div className="markdown-body">
-                  <ReactMarkdown>{content}</ReactMarkdown>
-                </div>
-              ) : (
-                <p className="text-sm text-slate-400 dark:text-slate-500 italic font-serif">No manuscript text to preview yet. Begin composing above.</p>
-              )}
-            </div>
-          )}
+        {/* Minimal Formatting Bar */}
+        <div className="flex items-center space-x-1 py-1.5 border-y border-[#EDEDEA] dark:border-[#27272A] text-neutral-500 text-xs">
+          <button
+            type="button"
+            onClick={() => insertMarkdown('**', '**')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="Bold"
+          >
+            <Bold className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertMarkdown('*', '*')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="Italic"
+          >
+            <Italic className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertMarkdown('## ')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="Heading"
+          >
+            <Heading className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertMarkdown('> ')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="Quote"
+          >
+            <Quote className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertMarkdown('- ')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="List"
+          >
+            <List className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => insertMarkdown('[', '](https://example.com)')}
+            className="p-1 hover:text-neutral-900 dark:hover:text-white rounded"
+            title="Link"
+          >
+            <Link2 className="w-3.5 h-3.5" />
+          </button>
         </div>
+
+        {/* Editor or Preview */}
+        {activeTab === 'write' ? (
+          <textarea
+            id="post-content-textarea"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Tell your story in Markdown..."
+            rows={18}
+            required
+            className="w-full font-serif text-[1.125rem] leading-[1.8] text-neutral-800 dark:text-neutral-200 placeholder:text-neutral-300 dark:placeholder:text-neutral-600 bg-transparent border-none focus:outline-none focus:ring-0 px-0 resize-y"
+          />
+        ) : (
+          <div className="min-h-[400px] py-4">
+            {content.trim() ? (
+              <div className="markdown-body">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
+            ) : (
+              <p className="font-serif italic text-neutral-400">Nothing to preview yet. Start typing above.</p>
+            )}
+          </div>
+        )}
       </form>
     </div>
   );
