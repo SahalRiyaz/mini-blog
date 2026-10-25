@@ -59,13 +59,13 @@ export default function PostCard({ post }) {
   };
 
   return (
-    <article className="border-b border-[#EDEDEA] dark:border-[#27272A] pb-8 mb-8 last:border-b-0 transition-colors group">
+    <article className="border-b border-gray-800/80 pb-8 mb-8 last:border-b-0 transition-colors group">
       {/* Top Byline Row */}
-      <div className="flex items-center space-x-2 text-xs text-neutral-500 dark:text-neutral-400 mb-2.5">
-        <div className="w-5 h-5 rounded-full bg-[#FF6719]/10 text-[#FF6719] flex items-center justify-center font-bold text-[10px]">
+      <div className="flex items-center space-x-2 text-xs text-gray-400 mb-2.5">
+        <div className="w-5 h-5 rounded-full bg-blue-950/60 text-blue-400 border border-blue-800/80 flex items-center justify-center font-bold text-[10px]">
           {authorName.charAt(0).toUpperCase()}
         </div>
-        <span className="font-semibold text-neutral-800 dark:text-neutral-200">{authorName}</span>
+        <span className="font-semibold text-gray-200">{authorName}</span>
         <span>•</span>
         <span>{formattedDate}</span>
         <span>•</span>
@@ -74,11 +74,11 @@ export default function PostCard({ post }) {
 
       {/* Main Headline */}
       <Link to={`/posts/${post.id}`} className="block">
-        <h2 className="font-serif font-bold text-2xl sm:text-[1.7rem] text-[#1C1C1C] dark:text-[#F3F3F3] leading-snug tracking-tight group-hover:text-[#FF6719] dark:group-hover:text-[#FF7D3B] transition-colors mb-2">
+        <h2 className="font-serif font-bold text-2xl sm:text-[1.7rem] text-[#F3F3F3] leading-snug tracking-tight group-hover:text-blue-400 transition-colors mb-2">
           {post.title}
         </h2>
         {/* Subtitle / Excerpt */}
-        <p className="font-sans text-neutral-600 dark:text-neutral-400 text-sm sm:text-base leading-relaxed line-clamp-2 mb-3.5">
+        <p className="font-sans text-[#A1A1AA] text-sm sm:text-base leading-relaxed line-clamp-2 mb-3.5">
           {excerpt}
         </p>
       </Link>
@@ -92,25 +92,25 @@ export default function PostCard({ post }) {
         </div>
       )}
 
-      {/* Substack Bottom Engagement Bar */}
-      <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 pt-1">
+      {/* Bottom Engagement Bar */}
+      <div className="flex items-center justify-between text-xs text-gray-400 pt-1">
         <div className="flex items-center space-x-4">
           {/* Like Heart */}
           <button
             type="button"
             onClick={handleLike}
             className={`flex items-center space-x-1.5 transition-colors ${
-              liked ? 'text-rose-600' : 'hover:text-neutral-800 dark:hover:text-neutral-200'
+              liked ? 'text-rose-500' : 'hover:text-white'
             }`}
           >
-            <Heart className={`w-4 h-4 ${liked ? 'fill-rose-600 text-rose-600' : ''}`} />
-            <span className="font-medium">{likeCount}</span>
+            <Heart className={`w-4 h-4 ${liked ? 'fill-rose-500 text-rose-500' : ''}`} />
+            <span className="font-medium text-gray-300">{likeCount}</span>
           </button>
 
           {/* Comments link */}
           <Link
             to={`/posts/${post.id}#comments`}
-            className="flex items-center space-x-1.5 hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors"
+            className="flex items-center space-x-1.5 hover:text-white transition-colors"
           >
             <MessageSquare className="w-4 h-4" />
             <span className="font-medium">Reflect</span>
@@ -122,10 +122,10 @@ export default function PostCard({ post }) {
           <button
             type="button"
             onClick={handleShare}
-            className="p-1 hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors"
+            className="p-1 hover:text-white transition-colors"
             title="Copy link"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
           </button>
 
           {/* Bookmark */}
@@ -133,11 +133,11 @@ export default function PostCard({ post }) {
             type="button"
             onClick={handleBookmark}
             className={`p-1 transition-colors ${
-              bookmarked ? 'text-[#FF6719]' : 'hover:text-neutral-800 dark:hover:text-neutral-200'
+              bookmarked ? 'text-blue-400' : 'hover:text-white'
             }`}
             title="Save essay"
           >
-            <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-[#FF6719]' : ''}`} />
+            <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-blue-400' : ''}`} />
           </button>
         </div>
       </div>

@@ -17,14 +17,14 @@ import { AlertCircle } from 'lucide-react';
 function NotFoundPage() {
   return (
     <div className="max-w-md mx-auto text-center py-20 px-4">
-      <AlertCircle className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-      <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">404 - Page Not Found</h1>
-      <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">The page you were looking for does not exist.</p>
+      <AlertCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+      <h1 className="text-2xl font-serif font-bold text-white mb-2">404 - Page Not Found</h1>
+      <p className="text-sm text-gray-400 mb-6">The page you were looking for does not exist.</p>
       <Link
         to="/"
-        className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-xl shadow-sm"
+        className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-full shadow-sm"
       >
-        Go to Homepage
+        Go to Publication
       </Link>
     </div>
   );
@@ -35,7 +35,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
-          <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-brand-500 selection:text-white transition-colors duration-150">
+          <div className="min-h-screen flex flex-col bg-[#090A0F] text-[#E4E4E7] selection:bg-blue-600 selection:text-white transition-colors duration-150">
             <Navbar />
             <main className="flex-1">
               <Routes>
@@ -45,7 +45,7 @@ export default function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
-                {/* Admin Protected Routes */}
+                {/* Curator Protected Routes */}
                 <Route
                   path="/admin"
                   element={

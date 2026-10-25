@@ -68,85 +68,85 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-      {/* Substack Dashboard Masthead */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EDEDEA] dark:border-[#27272A] mb-8">
+      {/* Dashboard Masthead */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-800 mb-8">
         <div>
-          <span className="text-xs uppercase font-sans font-bold tracking-widest text-[#FF6719]">
+          <span className="text-xs uppercase font-sans font-bold tracking-widest text-blue-400">
             Publication Studio
           </span>
-          <h1 className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">
+          <h1 className="font-serif font-bold text-3xl text-white mt-1">
             Canvas & Prose
           </h1>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            Logged in as {user?.name || 'Curator'} ({user?.email})
+          <p className="text-xs text-gray-400 mt-0.5">
+            Curated by {user?.name || 'Curator'} ({user?.email})
           </p>
         </div>
 
         <Link
           to="/admin/new"
-          className="inline-flex items-center space-x-1.5 px-5 py-2 rounded-full bg-[#FF6719] hover:bg-[#E5530B] text-white text-xs font-bold tracking-tight shadow-sm transition-all"
+          className="inline-flex items-center space-x-1.5 px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold tracking-tight shadow-md transition-all"
         >
           <PenSquare className="w-3.5 h-3.5" />
           <span>New Post</span>
         </Link>
       </div>
 
-      {/* Real Metric Counters */}
+      {/* Metric Counters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
-          <span className="text-xs text-neutral-500 font-medium font-sans">Published Articles</span>
-          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">{posts.length}</p>
+        <div className="p-5 rounded-xl bg-[#0D0E15] border border-gray-800">
+          <span className="text-xs text-gray-400 font-medium font-sans">Published Articles</span>
+          <p className="font-serif font-bold text-3xl text-white mt-1">{posts.length}</p>
         </div>
 
-        <div className="p-5 rounded-xl bg-white dark:bg-[#18181A] border border-[#EDEDEA] dark:border-[#27272A]">
-          <span className="text-xs text-neutral-500 font-medium font-sans">Active Themes & Tags</span>
-          <p className="font-serif font-bold text-3xl text-neutral-900 dark:text-white mt-1">{totalTags}</p>
+        <div className="p-5 rounded-xl bg-[#0D0E15] border border-gray-800">
+          <span className="text-xs text-gray-400 font-medium font-sans">Active Themes & Tags</span>
+          <p className="font-serif font-bold text-3xl text-blue-400 mt-1">{totalTags}</p>
         </div>
       </div>
 
       {/* Post List Section */}
-      <div className="bg-white dark:bg-[#18181A] rounded-xl border border-[#EDEDEA] dark:border-[#27272A] overflow-hidden">
-        <div className="p-4 border-b border-[#EDEDEA] dark:border-[#27272A] flex items-center justify-between gap-4">
-          <span className="font-serif font-bold text-base text-neutral-900 dark:text-white">Articles</span>
+      <div className="bg-[#0D0E15] rounded-xl border border-gray-800 overflow-hidden">
+        <div className="p-4 border-b border-gray-800 flex items-center justify-between gap-4">
+          <span className="font-serif font-bold text-base text-white">Articles</span>
           <div className="relative max-w-xs w-full">
-            <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-2.5" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search articles..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-[#FCFBF9] dark:bg-[#121214] text-xs text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#FF6719]"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-gray-800 bg-[#12141D] text-xs text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         {error && (
-          <div className="m-4 p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs rounded-lg flex items-center space-x-2">
+          <div className="m-4 p-3 bg-rose-950/40 border border-rose-800 text-rose-300 text-xs rounded-lg flex items-center space-x-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
-          <div className="p-8 text-center text-xs text-neutral-400">Loading articles...</div>
+          <div className="p-8 text-center text-xs text-gray-400">Loading articles...</div>
         ) : filteredPosts.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="font-serif text-base text-neutral-800 dark:text-neutral-200 mb-1">
+            <p className="font-serif text-base text-gray-200 mb-1">
               No articles published yet
             </p>
-            <p className="text-xs text-neutral-500 mb-4">
+            <p className="text-xs text-gray-400 mb-4">
               Write and publish an original article to share with your readers.
             </p>
             <Link
               to="/admin/new"
-              className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-[#FF6719] text-white text-xs font-bold"
+              className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md"
             >
               <PenSquare className="w-3 h-3" />
               <span>Compose First Article</span>
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-[#EDEDEA] dark:divide-[#27272A]">
+          <div className="divide-y divide-gray-800/80">
             {filteredPosts.map((post) => {
               const dateStr = post.createdAt
                 ? new Date(post.createdAt).toLocaleDateString('en-US', {
@@ -159,17 +159,17 @@ export default function AdminDashboardPage() {
               return (
                 <div
                   key={post.id}
-                  className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                  className="p-4 flex items-center justify-between hover:bg-[#12141D]/60 transition-colors"
                 >
                   <div className="max-w-md pr-4">
                     <Link
                       to={`/posts/${post.id}`}
-                      className="font-serif font-bold text-base text-neutral-900 dark:text-white hover:text-[#FF6719] transition-colors line-clamp-1"
+                      className="font-serif font-bold text-base text-white hover:text-blue-400 transition-colors line-clamp-1"
                     >
                       {post.title}
                     </Link>
-                    <div className="flex items-center space-x-2 text-xs text-neutral-400 mt-1">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px] uppercase">
+                    <div className="flex items-center space-x-2 text-xs text-gray-400 mt-1">
+                      <span className="text-blue-400 font-semibold text-[10px] uppercase">
                         Published
                       </span>
                       <span>•</span>
@@ -180,14 +180,14 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center space-x-2">
                     <Link
                       to={`/posts/${post.id}`}
-                      className="p-1.5 text-neutral-400 hover:text-neutral-800 dark:hover:text-white rounded"
+                      className="p-1.5 text-gray-400 hover:text-white rounded"
                       title="View post"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </Link>
                     <Link
                       to={`/admin/edit/${post.id}`}
-                      className="p-1.5 text-neutral-400 hover:text-[#FF6719] rounded"
+                      className="p-1.5 text-gray-400 hover:text-blue-400 rounded"
                       title="Edit post"
                     >
                       <Edit3 className="w-4 h-4" />
@@ -196,7 +196,7 @@ export default function AdminDashboardPage() {
                       type="button"
                       onClick={() => handleDelete(post.id, post.title)}
                       disabled={deletingId === post.id}
-                      className="p-1.5 text-neutral-400 hover:text-rose-600 rounded disabled:opacity-50"
+                      className="p-1.5 text-gray-400 hover:text-rose-400 rounded disabled:opacity-50"
                       title="Retract post"
                     >
                       <Trash2 className="w-4 h-4" />

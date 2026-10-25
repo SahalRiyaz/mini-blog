@@ -4,37 +4,37 @@
 
 @layer base {
   body {
-    @apply bg-[#FCFBF9] dark:bg-[#0F0F10] text-[#1c1c1c] dark:text-[#E8E8E8] selection:bg-[#FF6719] selection:text-white transition-colors duration-150;
+    @apply bg-[#090A0F] text-[#E4E4E7] selection:bg-blue-600 selection:text-white transition-colors duration-150;
   }
 }
 
-/* Substack-style Markdown Typography */
+/* Substack-style Markdown Typography in Black, Blue, and Gray */
 .markdown-body {
-  @apply font-serif text-[1.125rem] leading-[1.8] text-neutral-800 dark:text-neutral-200 tracking-normal;
+  @apply font-serif text-[1.125rem] leading-[1.8] text-[#D4D4D8] tracking-normal;
 }
 
 .markdown-body h1 {
-  @apply font-serif text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mt-10 mb-5 tracking-tight leading-tight;
+  @apply font-serif text-3xl md:text-4xl font-bold text-[#F4F4F5] mt-10 mb-5 tracking-tight leading-tight border-b border-gray-800 pb-2;
 }
 
 .markdown-body h2 {
-  @apply font-serif text-2xl md:text-3xl font-semibold text-neutral-900 dark:text-white mt-8 mb-4 tracking-tight leading-snug;
+  @apply font-serif text-2xl md:text-3xl font-semibold text-[#F4F4F5] mt-8 mb-4 tracking-tight leading-snug;
 }
 
 .markdown-body h3 {
-  @apply font-serif text-xl md:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 mt-6 mb-3;
+  @apply font-serif text-xl md:text-2xl font-semibold text-[#E4E4E7] mt-6 mb-3;
 }
 
 .markdown-body p {
-  @apply mb-6 leading-[1.8] text-neutral-800 dark:text-neutral-200;
+  @apply mb-6 leading-[1.8] text-[#D4D4D8];
 }
 
 .markdown-body ul {
-  @apply list-disc list-inside mb-6 space-y-2 text-neutral-800 dark:text-neutral-200 pl-3;
+  @apply list-disc list-inside mb-6 space-y-2 text-[#D4D4D8] pl-3;
 }
 
 .markdown-body ol {
-  @apply list-decimal list-inside mb-6 space-y-2 text-neutral-800 dark:text-neutral-200 pl-3;
+  @apply list-decimal list-inside mb-6 space-y-2 text-[#D4D4D8] pl-3;
 }
 
 .markdown-body li > ul,
@@ -43,62 +43,25 @@
 }
 
 .markdown-body blockquote {
-  @apply border-l-[3px] border-[#FF6719] pl-5 py-1 my-6 italic text-neutral-700 dark:text-neutral-300 font-serif text-[1.15rem];
+  @apply border-l-[3px] border-[#3B82F6] bg-[#0D0E15] pl-5 py-2.5 my-6 italic text-[#CBD5E1] font-serif text-[1.15rem] rounded-r-lg;
 }
 
 .markdown-body pre {
-  @apply bg-[#18181b] border border-neutral-800 text-neutral-100 p-5 rounded-lg my-6 overflow-x-auto text-sm font-mono leading-relaxed;
+  @apply bg-[#07080B] border border-gray-800 text-gray-200 p-5 rounded-xl my-6 overflow-x-auto text-sm font-mono leading-relaxed;
 }
 
 .markdown-body code {
-  @apply bg-neutral-100 dark:bg-neutral-800 text-[#FF6719] px-1.5 py-0.5 rounded font-mono text-sm;
+  @apply bg-[#12141D] text-[#60A5FA] px-1.5 py-0.5 rounded font-mono text-sm border border-gray-800;
 }
 
 .markdown-body pre code {
-  @apply bg-transparent text-inherit p-0;
+  @apply bg-transparent text-inherit p-0 border-0;
 }
 
 .markdown-body a {
-  @apply text-[#FF6719] hover:underline underline-offset-4 font-normal transition-colors;
+  @apply text-[#3B82F6] hover:text-[#60A5FA] hover:underline underline-offset-4 font-normal transition-colors;
 }
 
 .markdown-body hr {
-  @apply my-10 border-neutral-200 dark:border-neutral-800;
-}
-
-/* Dark Mode Markdown Overrides */
-.dark .markdown-body {
-  @apply text-neutral-200;
-}
-
-.dark .markdown-body h1,
-.dark .markdown-body h2,
-.dark .markdown-body h3 {
-  @apply text-neutral-100 border-neutral-800;
-}
-
-.dark .markdown-body p,
-.dark .markdown-body ul,
-.dark .markdown-body ol {
-  @apply text-neutral-300;
-}
-
-.dark .markdown-body blockquote {
-  @apply border-[#FF6719] text-neutral-300;
-}
-
-.dark .markdown-body pre {
-  @apply bg-[#121214] border-neutral-800 text-neutral-200;
-}
-
-.dark .markdown-body code {
-  @apply bg-neutral-800 text-[#FF7D3B];
-}
-
-.dark .markdown-body a {
-  @apply text-[#FF7D3B] hover:underline;
-}
-
-.dark .markdown-body hr {
-  @apply border-neutral-800;
+  @apply my-10 border-gray-800;
 }
