@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 selection:bg-brand-500 selection:text-white;
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-brand-500 selection:text-white transition-colors duration-150;
   }
 }
 
@@ -64,4 +64,44 @@
 
 .markdown-body hr {
   @apply my-8 border-slate-200;
+}
+
+/* Dark Mode Markdown Overrides */
+.dark .markdown-body {
+  @apply text-slate-200;
+}
+
+.dark .markdown-body h1,
+.dark .markdown-body h2 {
+  @apply text-slate-100 border-slate-800;
+}
+
+.dark .markdown-body h3 {
+  @apply text-slate-200;
+}
+
+.dark .markdown-body p,
+.dark .markdown-body ul,
+.dark .markdown-body ol {
+  @apply text-slate-300;
+}
+
+.dark .markdown-body blockquote {
+  @apply bg-slate-900/90 border-brand-500 text-slate-300;
+}
+
+.dark .markdown-body pre {
+  @apply bg-slate-950 border border-slate-800 text-slate-100;
+}
+
+.dark .markdown-body code {
+  @apply bg-slate-800 text-brand-300;
+}
+
+.dark .markdown-body a {
+  @apply text-brand-400 hover:text-brand-300;
+}
+
+.dark .markdown-body hr {
+  @apply border-slate-800;
 }
